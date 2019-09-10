@@ -4,10 +4,11 @@ import axios from 'axios';
 import { environment } from '../enviroment';
 import { jsxElement } from '@babel/types';
 import { encode } from 'punycode';
+import { User } from '../models/User';
 
 type MyProps = {};
 type MyState = { email: string, password: string };
-
+var user = new User();
 
 export default class HomePage extends React.Component<MyProps, MyState> {
 
@@ -24,18 +25,17 @@ export default class HomePage extends React.Component<MyProps, MyState> {
     }
   }
 
-  async handleSubmit(e: FormEvent) {
+  handleSubmit(e: FormEvent) {
     e.preventDefault();
-
     try {
+      // user =
+      this.login(this.state.email, this.state.password);
 
-      const user = await this.login(this.state.email, this.state.password);
-
-      // ...
     } catch (e) {
       console.error(e);
     }
   }
+
   handleEmailChange(event: any) {
     this.setState({ 'email': event.target.value });
   }
@@ -43,7 +43,7 @@ export default class HomePage extends React.Component<MyProps, MyState> {
     this.setState({ 'password': event.target.value });
   }
 
-  login(email: string, password: string) {
+  async login(email: string, password: string) {
 
     const object: any = { 'email': email, 'password': password };
 
@@ -57,11 +57,12 @@ export default class HomePage extends React.Component<MyProps, MyState> {
     const formBodyString = formBody.join("&");
 
 
-    console.log(environment.LOGIN_URL);
-    axios.post(environment.LOGIN_URL, formBodyString, this.config).then(response => response.data)
+    user = await axios.post(environment.LOGIN_URL, formBodyString, this.config).then(response => response.data)
       .then((data) => {
-        console.log(data)
+        console.dir(data)
+        return data
       })
+    console.log(user);
   }
 
 
