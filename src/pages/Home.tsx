@@ -5,8 +5,9 @@ import { environment } from '../enviroment';
 import { jsxElement } from '@babel/types';
 import { encode } from 'punycode';
 import { User } from '../models/User';
+import { History, LocationState } from "history";
 
-type MyProps = {};
+type MyProps = { history: History };
 type MyState = { email: string, password: string };
 var user = new User();
 
@@ -62,6 +63,7 @@ export default class HomePage extends React.Component<MyProps, MyState> {
         console.dir(data)
         return data
       })
+    this.props.history.push('/Dashboard')
     console.log(user);
   }
 

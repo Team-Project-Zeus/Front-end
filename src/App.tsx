@@ -22,6 +22,7 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import Dashboard from './pages/Dashboard';
 
 const App: React.FunctionComponent = () => (
   <IonApp>
@@ -29,6 +30,8 @@ const App: React.FunctionComponent = () => (
       <IonPage>
         <IonRouterOutlet>
           <Route path="/home" component={Home} exact={true} />
+          <Route path="/dashboard" component={Dashboard} exact={true} />
+
           <Route exact path="/" render={() => <Redirect to="/home" />} />
         </IonRouterOutlet>
       </IonPage>
