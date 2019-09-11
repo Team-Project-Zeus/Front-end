@@ -6,6 +6,8 @@ import { jsxElement } from '@babel/types';
 import { encode } from 'punycode';
 import { User } from '../models/User';
 import { History, LocationState } from "history";
+import { Storage } from '@ionic/storage';
+
 
 type MyProps = { history: History };
 type MyState = { email: string, password: string };
@@ -25,6 +27,8 @@ export default class HomePage extends React.Component<MyProps, MyState> {
       password: ''
     }
   }
+
+
 
   handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -58,11 +62,18 @@ export default class HomePage extends React.Component<MyProps, MyState> {
     const formBodyString = formBody.join("&");
 
 
-    user = await axios.post(environment.LOGIN_URL, formBodyString, this.config).then(response => response.data)
+    const data = await axios.post(environment.LOGIN_URL, formBodyString, this.config).then(response => response.data)
       .then((data) => {
         console.dir(data)
         return data
       })
+    user = data['user'];
+    const authToken = data['authToken'];
+
+    localStorage.setItem('useremail', user.email)
+    localStorage.setItem('userRole', user.role)
+    localStorage.setItem("authToken", authToken)
+
     this.props.history.push('/Dashboard')
     console.log(user);
   }
