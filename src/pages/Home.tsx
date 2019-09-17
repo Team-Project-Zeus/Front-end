@@ -74,6 +74,9 @@ export default class HomePage extends React.Component<MyProps, MyState> {
     localStorage.setItem('userRole', user.role)
     localStorage.setItem("authToken", authToken)
 
+
+
+
     this.props.history.push('/Dashboard')
     console.log(user);
   }

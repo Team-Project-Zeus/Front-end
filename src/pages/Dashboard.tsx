@@ -12,6 +12,7 @@ require('moment/locale/nl.js');
 
 
 
+var date = { currentTime: new Date().toLocaleString() };
 
 type MyProps = { history: History };
 type MyState = {
@@ -32,33 +33,17 @@ var colors = {
 }
 
 var now = new Date();
-var items = [
-    {
-        _id: guid(),
-        name: 'Meeting , dev staff!',
-        startDateTime: new Date(now.getFullYear(), now.getMonth(), now.getDate(), 10, 0),
-        endDateTime: new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12, 0),
-        classes: 'color-1'
-    },
-    {
-        _id: guid(),
-        name: 'Working lunch , Holly',
-        startDateTime: new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 11, 0),
-        endDateTime: new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 13, 0),
-        classes: 'color-2 color-3'
-    },
-
-];
 
 export default class Dashboard extends React.Component<MyProps, MyState> {
     config = {
-        headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'Authorization', '': 'Bearer ' + localStorage.getItem('authToken') }
+        headers: { 'Access-Control-Allow-Origin': '*' }
     };
 
     constructor(props: any) {
+
         super(props);
         this.state = {
-            items: items,
+            items: [],
             selected: [],
             cellHeight: 30,
             showModal: false,
@@ -67,6 +52,8 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
             numberOfDays: 5,
             startDate: new Date(),
         };
+        this.setState({ 'startDate': now });
+
 
         this.handleCellSelection = this.handleCellSelection.bind(this);
         this.handleItemEdit = this.handleItemEdit.bind(this);
@@ -74,9 +61,23 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
     }
 
     componentDidMount() {
-        const data = axios.post(environment.API_URL + "/" + localStorage.getItem('useremail'), this.config).then(response => response.data)
+        axios.defaults.headers.common = { 'Authorization': `bearer ${localStorage.getItem('authToken')}` }
+        const data = axios.post(environment.API_URL + "/agenda/" + localStorage.getItem('useremail'), this.config).then(response => response.data)
             .then((data) => {
-                console.dir(data)
+                const items = [];
+                for (var x = 0; data['appointments'].length > x; x++) {
+                    var item = {
+                        _id: guid(),
+                        name: data['appointments'][x].instructor,
+                        startDateTime: new Date(data['appointments'][x]['start-time']),
+                        endDateTime: new Date(data['appointments'][x]['end-time']),
+                        classes: 'color-2 color-3'
+                    }
+
+                    items.push(item)
+                }
+
+                this.setState({ 'items': items });
                 return data
             })
     }
