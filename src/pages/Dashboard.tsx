@@ -1,11 +1,13 @@
 
 import React, { FormEvent, useState } from 'react';
 // @ts-ignore
-import { ReactAgenda, ReactAgendaCtrl, guid, Modal } from 'react-agenda';
+import { ReactAgenda, guid, Modal } from 'react-agenda';
 import './AgendaStyle.css';
 import './DateTimeStyle.css';
 import axios from 'axios';
 import { environment } from '../enviroment';
+import ModifiedReactAgendaItem from '../modifiedAgenda/reactAgendaItem';
+import ModifiedReactAgendaCtrl from '../modifiedAgenda/modifiedReactAgendaCtrl';
 
 
 require('moment/locale/nl.js');
@@ -17,9 +19,9 @@ var date = { currentTime: new Date().toLocaleString() };
 type MyProps = { history: History };
 type MyState = {
     items: any,
-    selected: [],
+    selected: any,
     cellHeight: 30,
-    showModal: false,
+    showModal: boolean,
     locale: "nl",
     rowsPerHour: 2,
     numberOfDays: 5,
@@ -57,6 +59,8 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
 
         this.handleCellSelection = this.handleCellSelection.bind(this);
         this.handleItemEdit = this.handleItemEdit.bind(this);
+        this._openModal = this._openModal.bind(this)
+        this._closeModal = this._closeModal.bind(this)
         this.handleRangeSelection = this.handleRangeSelection.bind(this);
     }
 
@@ -86,12 +90,31 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
         console.log('handleCellSelection', item);
     }
     handleItemEdit(item: any) {
-
-        console.log('handleItemEdit', item);
+        if (item && this.state.showModal === false) {
+            this.setState({ 'selected': [item] });
+            this._closeModal("test");
+            return this._openModal();
+        }
     }
+
+    _openModal() {
+        console.log('test');
+
+
+        this.setState({ 'showModal': true })
+    }
+    _closeModal(e: any) {
+        // if (e) {
+        //     e.stopPropagation();
+        //     e.preventDefault();
+        // }
+        this.setState({ 'showModal': false })
+    }
+
     handleRangeSelection(item: any) {
         console.log('handleRangeSelection', item);
     }
+
     render() {
         return (
             <div>
@@ -109,8 +132,17 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
                     autoScale={false}
                     fixedHeader={true}
                     onItemEdit={this.handleItemEdit.bind(this)}
+                    itemComponent={ModifiedReactAgendaItem}
                     onCellSelect={this.handleCellSelection.bind(this)}
                     onRangeSelection={this.handleRangeSelection.bind(this)} />
+                {
+                    this.state.showModal ? <Modal clickOutside={this._closeModal} >
+                        <div className="modal-content">
+                            <ModifiedReactAgendaCtrl items={this.state.items} itemColors={colors} selectedCells={this.state.selected} />
+
+                        </div>
+                    </Modal> : ''
+                }
             </div>
         );
     }
