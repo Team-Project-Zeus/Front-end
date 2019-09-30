@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@capacitor/android": "^1.2.0",
-    "@capacitor/core": "1.2.0",
+    "@capacitor/core": "^1.2.0",
     "@ionic/react": "^4.8.0-rc.0",
     "@ionic/react-router": "^4.8.0-rc.0",
     "@ionic/storage": "^2.2.0",
@@ -23,6 +23,7 @@
     "react-router": "^5.0.1",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.1.0",
+    "save": "^2.4.0",
     "typescript": "3.5.3"
   },
   "scripts": {
@@ -42,6 +43,6 @@
   ],
   "description": "An Ionic project",
   "devDependencies": {
-    "@capacitor/cli": "1.2.0"
+    "@capacitor/cli": "^1.2.0"
   }
 }
