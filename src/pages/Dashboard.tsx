@@ -6,7 +6,7 @@ import './AgendaStyle.css';
 import './DateTimeStyle.css';
 import axios from 'axios';
 import { environment } from '../enviroment';
-import ModifiedReactAgendaItem from '../modifiedAgenda/reactAgendaItem';
+import ModifiedReactAgendaItem from '../modifiedAgenda/modifiedReactAgendaItem';
 import ModifiedReactAgendaCtrl from '../modifiedAgenda/modifiedReactAgendaCtrl';
 
 

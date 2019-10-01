@@ -13,7 +13,9 @@ type MyProps = { history: History };
 type MyState = { email: string, password: string };
 var user = new User();
 
-export default class HomePage extends React.Component<MyProps, MyState> {
+
+
+export default class Login extends React.Component<MyProps, MyState> {
 
   config = {
     headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/x-www-form-urlencoded' }
@@ -67,12 +69,15 @@ export default class HomePage extends React.Component<MyProps, MyState> {
         console.dir(data)
         return data
       })
-    user = data['user'];
-    const authToken = data['authToken'];
+    // user = data['user'];
+    const authToken = data['token'];
 
-    localStorage.setItem('useremail', user.email)
-    localStorage.setItem('userRole', user.role)
+    localStorage.setItem('useremail', email)
+    //TODO ADD USER ROLE localStorage.setItem('userRole', user.role)
+
     localStorage.setItem("authToken", authToken)
+    localStorage.setItem("loggedIn", "true")
+
 
 
 
