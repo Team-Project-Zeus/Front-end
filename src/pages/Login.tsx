@@ -2,11 +2,8 @@ import { IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton, IonLi
 import React, { FormEvent, useState } from 'react';
 import axios from 'axios';
 import { environment } from '../enviroment';
-import { jsxElement } from '@babel/types';
-import { encode } from 'punycode';
 import { User } from '../models/User';
 import { History, LocationState } from "history";
-import { Storage } from '@ionic/storage';
 
 
 type MyProps = { history: History };
@@ -28,9 +25,24 @@ export default class Login extends React.Component<MyProps, MyState> {
       email: '',
       password: ''
     }
+    // this.props.history.push('/logout');
+
+
   }
 
+  redirect(location: string) {
+    console.log('Trying this: ' + location)
+    try {
+      this.props.history.push(location);
 
+    }
+    catch (e) {
+      console.log(e);
+    }
+    console.dir(this.props.history.push(location));
+    console.log(location);
+
+  }
 
   handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -67,23 +79,33 @@ export default class Login extends React.Component<MyProps, MyState> {
     const data = await axios.post(environment.LOGIN_URL, formBodyString, this.config).then(response => response.data)
       .then((data) => {
         console.dir(data)
-        return data
-      })
+
+        const authToken = data['token'];
+
+        localStorage.setItem('useremail', email)
+        //TODO ADD USER ROLE localStorage.setItem('userRole', user.role)
+
+        localStorage.setItem("authToken", authToken)
+        localStorage.setItem("loggedIn", "true")
+
+        console.log(authToken);
+        this.redirect('/dashboard');
+
+        console.log(
+          "test"
+        );
+
+        console.log(user);
+
+      }).then((error) => {
+        console.dir(error);
+      }
+      )
+    // this.props.history.push('/dashboard');
+
+    console.log('test');
+
     // user = data['user'];
-    const authToken = data['token'];
-
-    localStorage.setItem('useremail', email)
-    //TODO ADD USER ROLE localStorage.setItem('userRole', user.role)
-
-    localStorage.setItem("authToken", authToken)
-    localStorage.setItem("loggedIn", "true")
-
-
-
-
-
-    this.props.history.push('/Dashboard')
-    console.log(user);
   }
 
 
