@@ -20,7 +20,6 @@ export default class Login extends React.Component<MyProps, MyState> {
 
   constructor(props: any) {
     super(props);
-    console.log('constructing!');
     this.state = {
       email: '',
       password: ''
@@ -39,7 +38,6 @@ export default class Login extends React.Component<MyProps, MyState> {
     catch (e) {
       console.log(e);
     }
-    console.dir(this.props.history.push(location));
     console.log(location);
 
   }
@@ -87,24 +85,14 @@ export default class Login extends React.Component<MyProps, MyState> {
 
         localStorage.setItem("authToken", authToken)
         localStorage.setItem("loggedIn", "true")
-
+        console.dir(localStorage);
         console.log(authToken);
         this.redirect('/dashboard');
 
-        console.log(
-          "test"
-        );
-
-        console.log(user);
-
-      }).then((error) => {
+      }, (error) => {
         console.dir(error);
-      }
-      )
+      })
     // this.props.history.push('/dashboard');
-
-    console.log('test');
-
     // user = data['user'];
   }
 
