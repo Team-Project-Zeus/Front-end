@@ -2,23 +2,31 @@ import { IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton, IonLi
 import React, { FormEvent, useState, Component } from 'react';
 import axios from 'axios';
 import { environment } from '../enviroment';
-import { User } from '../models/User';
+// import { User } from '../models/User';
+import store from '../store/store';
 // import { History, LocationState } from "history";
 // import { createBrowserHistory } from 'history';
-
+import * as user from '../store/user/actions';
 
 type MyProps = {};
 type MyState = { email: string, password: string };
-var user = new User();
+// var user = new User();
 
 // const history = createBrowserHistory();
 
 
 
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     setToken: user => dispatch(setToken(token))
+//   };
+// }
+
+
 export default class Login extends Component<any, MyState> {
 
   config = {
-    headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/x-www-form-urlencoded' }
+    headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' }
   };
 
   constructor(props: any) {
@@ -27,24 +35,22 @@ export default class Login extends Component<any, MyState> {
       email: '',
       password: ''
     }
-    // this.props.history.push('/logout');
-
 
   }
 
   redirect(location: string) {
-    console.log('Trying this: ' + location)
+    // console.log('Trying this: ' + location)
     try {
-      console.dir(this.props.history);
+      // console.dir(this.props.history);
       this.props.history.push(location);
-      console.dir(this.props.history);
+      // console.dir(this.props.history);
       // this.props.history.push(location);
 
     }
     catch (e) {
       console.log(e);
     }
-    console.log(location);
+    // console.log(location);
 
   }
 
@@ -82,17 +88,23 @@ export default class Login extends Component<any, MyState> {
 
     const data = await axios.post(environment.LOGIN_URL, formBodyString, this.config).then(response => response.data)
       .then((data) => {
-        console.dir(data)
+        console.log(environment.LOGIN_URL);
+        console.dir(data);
 
         const authToken = data['token'];
 
-        localStorage.setItem('useremail', email)
-        //TODO ADD USER ROLE localStorage.setItem('userRole', user.role)
 
-        localStorage.setItem("authToken", authToken)
-        localStorage.setItem("loggedIn", "true")
-        console.dir(localStorage);
-        console.log(authToken);
+        // localStorage.setItem('useremail', email)
+        //TODO ADD USER ROLE localStorage.setItem('userRole', user.role)
+        store.dispatch(user.setEmail(email))
+        store.dispatch(user.setToken(authToken))
+        console.dir(authToken);
+        store.dispatch(user.setName('test'))
+
+        // localStorage.setItem("authToken", authToken)
+        // localStorage.setItem("loggedIn", "true")
+        // console.dir(localStorage);
+        // console.log(authToken);
         // console.dir(history);
         // console.dir(this.props.history + '/dashboard');
 
@@ -104,6 +116,7 @@ export default class Login extends Component<any, MyState> {
         console.dir(error);
       })
     this.redirect('/dashboard');
+    console.dir(store.getState());
 
   }
 

@@ -11,9 +11,7 @@ const defaultState: User = {
     role: 'default',
     isAuthenticated: false,
     token: null
-
-}
-    ;
+};
 
 export type UserAction = ActionType<typeof users>;
 
@@ -25,10 +23,30 @@ export default (state = defaultState, action: UserAction): User => {
                 ...state,
                 isAuthenticated: action.payload
             };
-        case getType(users.setUsername):
+        case getType(users.setEmail):
             return {
                 ...state,
-                userName: action.payload
+                email: action.payload
+            }
+        case getType(users.setRole):
+            return {
+                ...state,
+                role: action.payload
+            }
+        case getType(users.setName):
+            return {
+                ...state,
+                name: action.payload
+            }
+        case getType(users.setPassword):
+            return {
+                ...state,
+                password: action.payload
+            }
+        case getType(users.setToken):
+            return {
+                ...state,
+                token: action.payload
             }
         default:
             return state;
