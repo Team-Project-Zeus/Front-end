@@ -1,18 +1,21 @@
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton, IonList, IonItem, IonLabel } from '@ionic/react';
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useState, Component } from 'react';
 import axios from 'axios';
 import { environment } from '../enviroment';
 import { User } from '../models/User';
-import { History, LocationState } from "history";
+// import { History, LocationState } from "history";
+// import { createBrowserHistory } from 'history';
 
 
-type MyProps = { history: History };
+type MyProps = {};
 type MyState = { email: string, password: string };
 var user = new User();
 
+// const history = createBrowserHistory();
 
 
-export default class Login extends React.Component<MyProps, MyState> {
+
+export default class Login extends Component<any, MyState> {
 
   config = {
     headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/x-www-form-urlencoded' }
@@ -32,7 +35,10 @@ export default class Login extends React.Component<MyProps, MyState> {
   redirect(location: string) {
     console.log('Trying this: ' + location)
     try {
+      console.dir(this.props.history);
       this.props.history.push(location);
+      console.dir(this.props.history);
+      // this.props.history.push(location);
 
     }
     catch (e) {
@@ -87,13 +93,18 @@ export default class Login extends React.Component<MyProps, MyState> {
         localStorage.setItem("loggedIn", "true")
         console.dir(localStorage);
         console.log(authToken);
-        this.redirect('/dashboard');
+        // console.dir(history);
+        // console.dir(this.props.history + '/dashboard');
+
+
+        // console.dir(this.props.history);
+
 
       }, (error) => {
         console.dir(error);
       })
-    // this.props.history.push('/dashboard');
-    // user = data['user'];
+    this.redirect('/dashboard');
+
   }
 
 

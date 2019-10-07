@@ -23,10 +23,14 @@ import '@ionic/react/css/display.css';
 
 
 
+
 /* Theme variables */
 import './theme/variables.css';
 import Dashboard from './pages/Dashboard';
 import LogOut from './pages/LogOut';
+import { PrivateRoute } from './utils/routing';
+import { Provider } from 'react-redux';
+import store from './store/store';
 
 interface IProps {
   component: any,
@@ -36,56 +40,63 @@ interface IProps {
   // any other props that come into the component
 }
 
-const ProtectedRoute = ({ component: Comp, loggedIn, path, ...rest }: IProps) => {
-  console.log(loggedIn);
-  if (loggedIn == "true") {
-    loggedIn = true;
-  }
-  else {
-    loggedIn = false;
-  }
-  console.log(loggedIn);
+// const ProtectedRoute = ({ component: Comp, loggedIn, path, ...rest }: IProps) => {
+//   console.dir(localStorage);
+//   console.log(loggedIn);
+//   // if (loggedIn == "true" || true == true) {
+//   //   loggedIn = true;
+//   // }
+//   // else {
+//   //   loggedIn = false;
+//   // }
+//   console.log(loggedIn);
 
-  return (
-    <Route
-      path={path}
-      {...rest}
-      render={props => {
-        return loggedIn ? (
-          <Comp {...props} />
-        ) : (
-            <Redirect
-              to={{
-                pathname: "/",
-                state: {
-                  prevLocation: '/home',
-                  error: "You need to login first!",
-                },
-              }}
-            />
-          );
-      }}
-    />
-  );
-};
+//   if (loggedIn == "true") {
+//     return (
+//       <Route
+//         path={path}
+//         {...rest}
+//         component={Comp} exact={true}
+//       // render={props => {
+//       //   return
+//       //   <Comp {...props} />
+//       // }
+//       />
+//     )
+//   }
+//   else {
+//     return (
+//       <Route exact path="/dashboard" render={() => <Redirect to="/home" />} />
+//     )
+
+//   }
+
+//  (
+//         );
+//     }}
+//   />
+// );
+// };
 
 
 
 const App: React.FunctionComponent = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonPage>
-        <IonRouterOutlet>
-          <Route path="/home" component={Login} exact={true} />
-          <ProtectedRoute path="/dashboard" loggedIn={localStorage.getItem('loggedIn')} component={Dashboard} />
+  <Provider store={store}>
+    <IonApp>
+      <IonReactRouter >
+        <IonPage>
+          <IonRouterOutlet >
+            <Route forceRefresh={true} path="/home" component={Login} />
 
-          <Route exact path="/" render={() => <Redirect to="/home" />} />
-          <Route path="/logout" component={LogOut} exact={true} />
+            <Route exact path="/" render={() => <Redirect to="/home" />} />
+            <Route forceRefresh={true} path="/logout" component={LogOut} exact={true} />
+            <PrivateRoute path="/dashboard" component={Dashboard} />
 
-        </IonRouterOutlet>
-      </IonPage>
-    </IonReactRouter>
-  </IonApp>
+          </IonRouterOutlet>
+        </IonPage>
+      </IonReactRouter>
+    </IonApp>
+  </Provider>
 );
 
 export default App;
