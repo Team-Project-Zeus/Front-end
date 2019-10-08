@@ -41,11 +41,12 @@ class PRoute extends Component<Props, MyState> {
             }
             return (
                 // <Route exact path="/dashboard" render={() => <Redirect to="/login" />} />
-                null
-                // <Redirect to={{
-                //     pathname: '/login',
-                //     state: { from: props.location }
-                // }} />
+                // null
+                // <p>REDIRECT TEST</p>
+                <Redirect to={{
+                    pathname: '/login',
+                    state: { from: props.location }
+                }} />
             );
         }
         return <Route render={routeRender.bind(this)} />;

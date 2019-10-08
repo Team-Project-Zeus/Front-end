@@ -86,8 +86,9 @@ const App: React.FunctionComponent = () => (
       <IonReactRouter >
         {/* <IonPage> */}
         <IonRouterOutlet >
-          <PrivateRoute path="/dashboard" component={Dashboard} />
-
+          <Route path="/dashboard">
+            <PrivateRoute path="/dashboard" component={Dashboard} />
+          </Route>
           <Route forceRefresh={true} path="/login" component={Login} />
 
           <Route exact path="/" render={() => <Redirect to="/login" />} />
