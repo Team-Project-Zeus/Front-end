@@ -2,26 +2,11 @@ import { IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton, IonLi
 import React, { FormEvent, useState, Component } from 'react';
 import axios from 'axios';
 import { environment } from '../enviroment';
-// import { User } from '../models/User';
 import store from '../store/store';
-// import { History, LocationState } from "history";
-// import { createBrowserHistory } from 'history';
 import * as user from '../store/user/actions';
 
 type MyProps = {};
 type MyState = { email: string, password: string };
-// var user = new User();
-
-// const history = createBrowserHistory();
-
-
-
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     setToken: user => dispatch(setToken(token))
-//   };
-// }
-
 
 export default class Login extends Component<any, MyState> {
 
@@ -38,26 +23,21 @@ export default class Login extends Component<any, MyState> {
 
   }
 
+  //Redirects to different page
   redirect(location: string) {
-    // console.log('Trying this: ' + location)
     try {
-      // console.dir(this.props.history);
       this.props.history.push(location);
-      // console.dir(this.props.history);
-      // this.props.history.push(location);
-
     }
     catch (e) {
       console.log(e);
     }
-    // console.log(location);
 
   }
 
   handleSubmit(e: FormEvent) {
     e.preventDefault();
     try {
-      // user =
+      // user login
       this.login(this.state.email, this.state.password);
 
     } catch (e) {
@@ -65,9 +45,11 @@ export default class Login extends Component<any, MyState> {
     }
   }
 
+  //Updates Email property
   handleEmailChange(event: any) {
     this.setState({ 'email': event.target.value });
   }
+  //Updates Password property
   handlePasswordChange(event: any) {
     this.setState({ 'password': event.target.value });
   }
@@ -78,6 +60,7 @@ export default class Login extends Component<any, MyState> {
 
 
     var formBody = [];
+    //Encoding Forminputs to FormUrlEncoded for security
     for (var property in object) {
       var encodedKey = encodeURIComponent(property);
       var encodedValue = encodeURIComponent(object[property]);
@@ -85,38 +68,25 @@ export default class Login extends Component<any, MyState> {
     }
     const formBodyString = formBody.join("&");
 
-
+    //Sending post request to database for login
     const data = await axios.post(environment.LOGIN_URL, formBodyString, this.config).then(response => response.data)
       .then((data) => {
-        // console.log(environment.LOGIN_URL);
-        console.dir(data);
-
         const authToken = data['token'];
 
-
-        // localStorage.setItem('useremail', email)
-        //TODO ADD USER ROLE localStorage.setItem('userRole', user.role)
+        //Storing user Data in redux
         store.dispatch(user.setEmail(email))
         store.dispatch(user.setToken(authToken))
-        // console.dir(authToken);
         store.dispatch(user.setName('test'))
-
+        //Saving token in localStorage to stay logged in 
         localStorage.setItem("token", authToken)
-        // localStorage.setItem("loggedIn", "true")
-        // console.dir(localStorage);
-        // console.log(authToken);
-        // console.dir(history);
-        // console.dir(this.props.history + '/dashboard');
 
-
-        // console.dir(this.props.history);
-
+        //Redirecting to Dashboard
+        this.redirect('/dashboard');
 
       }, (error) => {
         console.dir(error);
+        console.log(error.status);
       })
-    this.redirect('/dashboard');
-    // console.dir(store.getState());
 
   }
 

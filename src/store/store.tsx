@@ -8,17 +8,11 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 
 const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const appReducer = combineReducers({
+//initializels all the reducers
+const rootReducer = combineReducers({
     user
 });
 
-const rootReducer = (state: any, action: any) => {
-    if (action.type === 'USER_LOGOUT') {
-        state = undefined
-    }
-
-    return appReducer(state, action)
-}
 
 function configureStore(initialState?: {}) {
     return createStore(

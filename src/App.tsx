@@ -32,54 +32,6 @@ import { PrivateRoute } from './utils/routing';
 import { Provider } from 'react-redux';
 import store from './store/store';
 
-interface IProps {
-  component: any,
-  loggedIn: any,
-  path: string,
-
-  // any other props that come into the component
-}
-
-// const ProtectedRoute = ({ component: Comp, loggedIn, path, ...rest }: IProps) => {
-//   console.dir(localStorage);
-//   console.log(loggedIn);
-//   // if (loggedIn == "true" || true == true) {
-//   //   loggedIn = true;
-//   // }
-//   // else {
-//   //   loggedIn = false;
-//   // }
-//   console.log(loggedIn);
-
-//   if (loggedIn == "true") {
-//     return (
-//       <Route
-//         path={path}
-//         {...rest}
-//         component={Comp} exact={true}
-//       // render={props => {
-//       //   return
-//       //   <Comp {...props} />
-//       // }
-//       />
-//     )
-//   }
-//   else {
-//     return (
-//       <Route exact path="/dashboard" render={() => <Redirect to="/home" />} />
-//     )
-
-//   }
-
-//  (
-//         );
-//     }}
-//   />
-// );
-// };
-
-
-
 const App: React.FunctionComponent = () => (
   <Provider store={store}>
     <IonApp>

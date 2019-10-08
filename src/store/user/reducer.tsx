@@ -18,11 +18,6 @@ export type UserAction = ActionType<typeof users>;
 export default (state = defaultState, action: UserAction): User => {
     switch (action.type) {
         case getType(users.logIn):
-        case getType(users.logOut):
-            return {
-                ...state,
-                isAuthenticated: action.payload
-            };
         case getType(users.setEmail):
             return {
                 ...state,

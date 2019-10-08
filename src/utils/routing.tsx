@@ -27,22 +27,13 @@ class PRoute extends Component<Props, MyState> {
     componentDidMount() { console.log("test") }
 
     render() {
-        // console.log(this.state.email)
-        // console.log(localStorage.getItem('loggedIn'));
+
         const Component = this.props.component;
         const routeRender = (props: any) => {
-            // console.dir(this.props.user);
-
-            console.log("token:");
-            console.log(this.props.user.token);
             if (this.props.user.token !== null) {
-                console.dir(Component);
                 return React.createElement(Component, props);
             }
             return (
-                // <Route exact path="/dashboard" render={() => <Redirect to="/login" />} />
-                // null
-                // <p>REDIRECT TEST</p>
                 <Redirect to={{
                     pathname: '/login',
                     state: { from: props.location }
@@ -53,5 +44,4 @@ class PRoute extends Component<Props, MyState> {
     }
 }
 export const PrivateRoute = connect(mapStateToProps)(PRoute);
-// export const PrivateRoute = PRoute;
 

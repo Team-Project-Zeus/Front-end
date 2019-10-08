@@ -4,10 +4,6 @@ export const logIn = createAction('user/LOG_IN', resolve =>
     () => resolve(true)
 );
 
-export const logOut = createAction('user/LOG_OUT', resolve =>
-    () => resolve(false)
-);
-
 export const setEmail = createAction('user/SET_EMAIL', resolve =>
     (email: string) => resolve(email)
 )

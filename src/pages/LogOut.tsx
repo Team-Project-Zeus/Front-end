@@ -11,16 +11,12 @@ export default class LogOut extends React.Component {
 
   constructor(props: any) {
     super(props);
+    //Clears token from localstorage
     localStorage.clear();
-    // localStorage.removeItem('useremail')
-    // //TODO ADD USER ROLE localStorage.setItem('userRole', user.role)
-    // localStorage.removeItem("authToken")
-    // localStorage.setItem("loggedIn", 'false')
-    console.dir(store.getState());
+    //Sends reset to store
     store.dispatch({
       type: 'RESET'
     })
-    console.dir(store.getState());
   }
 
 
