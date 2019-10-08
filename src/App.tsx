@@ -84,16 +84,17 @@ const App: React.FunctionComponent = () => (
   <Provider store={store}>
     <IonApp>
       <IonReactRouter >
-        <IonPage>
-          <IonRouterOutlet >
-            <Route forceRefresh={true} path="/home" component={Login} />
+        {/* <IonPage> */}
+        <IonRouterOutlet >
+          <PrivateRoute path="/dashboard" component={Dashboard} />
 
-            <Route exact path="/" render={() => <Redirect to="/home" />} />
-            <Route forceRefresh={true} path="/logout" component={LogOut} exact={true} />
-            <PrivateRoute path="/dashboard" component={Dashboard} />
+          <Route forceRefresh={true} path="/login" component={Login} />
 
-          </IonRouterOutlet>
-        </IonPage>
+          <Route exact path="/" render={() => <Redirect to="/login" />} />
+          <Route forceRefresh={true} path="/logout" component={LogOut} exact={true} />
+
+        </IonRouterOutlet>
+        {/* </IonPage> */}
       </IonReactRouter>
     </IonApp>
   </Provider>

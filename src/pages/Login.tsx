@@ -88,7 +88,7 @@ export default class Login extends Component<any, MyState> {
 
     const data = await axios.post(environment.LOGIN_URL, formBodyString, this.config).then(response => response.data)
       .then((data) => {
-        console.log(environment.LOGIN_URL);
+        // console.log(environment.LOGIN_URL);
         console.dir(data);
 
         const authToken = data['token'];
@@ -98,10 +98,10 @@ export default class Login extends Component<any, MyState> {
         //TODO ADD USER ROLE localStorage.setItem('userRole', user.role)
         store.dispatch(user.setEmail(email))
         store.dispatch(user.setToken(authToken))
-        console.dir(authToken);
+        // console.dir(authToken);
         store.dispatch(user.setName('test'))
 
-        // localStorage.setItem("authToken", authToken)
+        localStorage.setItem("token", authToken)
         // localStorage.setItem("loggedIn", "true")
         // console.dir(localStorage);
         // console.log(authToken);
@@ -116,7 +116,7 @@ export default class Login extends Component<any, MyState> {
         console.dir(error);
       })
     this.redirect('/dashboard');
-    console.dir(store.getState());
+    // console.dir(store.getState());
 
   }
 

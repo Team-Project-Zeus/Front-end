@@ -28,20 +28,29 @@ class PRoute extends Component<Props, MyState> {
 
     render() {
         // console.log(this.state.email)
-        console.log(localStorage.getItem('loggedIn'));
+        // console.log(localStorage.getItem('loggedIn'));
         const Component = this.props.component;
         const routeRender = (props: any) => {
-            if (localStorage.getItem('loggedIn') == 'true' || true == true) {
+            // console.dir(this.props.user);
+
+            console.log("token:");
+            console.log(this.props.user.token);
+            if (this.props.user.token !== null) {
+                console.dir(Component);
                 return React.createElement(Component, props);
             }
             return (
-                <Redirect to={{
-                    pathname: '/login',
-                    state: { from: props.location }
-                }} />
+                // <Route exact path="/dashboard" render={() => <Redirect to="/login" />} />
+                null
+                // <Redirect to={{
+                //     pathname: '/login',
+                //     state: { from: props.location }
+                // }} />
             );
         }
         return <Route render={routeRender.bind(this)} />;
     }
 }
 export const PrivateRoute = connect(mapStateToProps)(PRoute);
+// export const PrivateRoute = PRoute;
+

@@ -10,7 +10,7 @@ const defaultState: User = {
     name: null,
     role: 'default',
     isAuthenticated: false,
-    token: null
+    token: localStorage.getItem('token')
 };
 
 export type UserAction = ActionType<typeof users>;
@@ -48,6 +48,7 @@ export default (state = defaultState, action: UserAction): User => {
                 ...state,
                 token: action.payload
             }
+
         default:
             return state;
     }
