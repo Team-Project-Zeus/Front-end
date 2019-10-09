@@ -1,24 +1,27 @@
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton, IonList, IonItem, IonLabel } from '@ionic/react';
 import React, { FormEvent, useState, Component } from 'react';
 import axios from 'axios';
-import { environment } from '../enviroment';
-import store from '../store/store';
-import * as user from '../store/user/actions';
+import { environment } from '../../enviroment';
+import store from '../../store/store';
+import * as user from '../../store/user/actions';
+import { errorCodes } from '../../utils/errorCodes';
 
-type MyProps = {};
-type MyState = { email: string, password: string };
+type MyProps = { errorMessage: string };
+type MyState = { email: string, password: string, errorMessage: string };
 
 export default class Login extends Component<any, MyState> {
 
   config = {
     headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' }
   };
+  errorMessage: any
 
   constructor(props: any) {
     super(props);
     this.state = {
       email: '',
-      password: ''
+      password: '',
+      errorMessage: ''
     }
 
   }
@@ -87,6 +90,10 @@ export default class Login extends Component<any, MyState> {
         console.log("error:")
         console.dir(error);
         console.log(error.response.status);
+        // if (error.response.status == 422) {
+        this.setState({ 'errorMessage': errorCodes[error.response.status] });
+        console.log(this.errorMessage);
+        // }
       })
 
   }
@@ -113,6 +120,7 @@ export default class Login extends Component<any, MyState> {
                 <IonInput name="password" type="password" value={this.state.password} onInput={(e: any) => this.handlePasswordChange(e)} />
               </IonItem>
               <IonButton type="submit">Log in</IonButton>
+              <IonItem><p>{this.state.errorMessage}</p></IonItem>
             </IonList>
           </form>
         </IonContent>
