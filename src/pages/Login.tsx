@@ -1,35 +1,43 @@
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton, IonList, IonItem, IonLabel } from '@ionic/react';
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useState, Component } from 'react';
 import axios from 'axios';
 import { environment } from '../enviroment';
-import { jsxElement } from '@babel/types';
-import { encode } from 'punycode';
-import { User } from '../models/User';
-import { History, LocationState } from "history";
+import store from '../store/store';
+import * as user from '../store/user/actions';
 
-type MyProps = { history: History };
+type MyProps = {};
 type MyState = { email: string, password: string };
-var user = new User();
 
-export default class HomePage extends React.Component<MyProps, MyState> {
+export default class Login extends Component<any, MyState> {
 
   config = {
-    headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/x-www-form-urlencoded' }
+    headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' }
   };
 
   constructor(props: any) {
     super(props);
-    console.log('constructing!');
     this.state = {
       email: '',
       password: ''
     }
+
+  }
+
+  //Redirects to different page
+  redirect(location: string) {
+    try {
+      this.props.history.push(location);
+    }
+    catch (e) {
+      console.log(e);
+    }
+
   }
 
   handleSubmit(e: FormEvent) {
     e.preventDefault();
     try {
-      // user =
+      // user login
       this.login(this.state.email, this.state.password);
 
     } catch (e) {
@@ -37,9 +45,11 @@ export default class HomePage extends React.Component<MyProps, MyState> {
     }
   }
 
+  //Updates Email property
   handleEmailChange(event: any) {
     this.setState({ 'email': event.target.value });
   }
+  //Updates Password property
   handlePasswordChange(event: any) {
     this.setState({ 'password': event.target.value });
   }
@@ -50,6 +60,7 @@ export default class HomePage extends React.Component<MyProps, MyState> {
 
 
     var formBody = [];
+    //Encoding Forminputs to FormUrlEncoded for security
     for (var property in object) {
       var encodedKey = encodeURIComponent(property);
       var encodedValue = encodeURIComponent(object[property]);
@@ -57,14 +68,26 @@ export default class HomePage extends React.Component<MyProps, MyState> {
     }
     const formBodyString = formBody.join("&");
 
-
-    user = await axios.post(environment.LOGIN_URL, formBodyString, this.config).then(response => response.data)
+    //Sending post request to database for login
+    const data = await axios.post(environment.LOGIN_URL, formBodyString, this.config).then(response => response.data)
       .then((data) => {
-        console.dir(data)
-        return data
+        const authToken = data['token'];
+
+        //Storing user Data in redux
+        store.dispatch(user.setEmail(email))
+        store.dispatch(user.setToken(authToken))
+        store.dispatch(user.setName('test'))
+        //Saving token in localStorage to stay logged in 
+        localStorage.setItem("token", authToken)
+
+        //Redirecting to Dashboard
+        this.redirect('/dashboard');
+
+      }, (error) => {
+        console.dir(error);
+        console.log(error.status);
       })
-    this.props.history.push('/Dashboard')
-    console.log(user);
+
   }
 
 

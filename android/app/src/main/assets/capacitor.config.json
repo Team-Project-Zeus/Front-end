@@ -1,6 +1,6 @@
 {
-  "appId": "com.zeus.app",
-  "appName": "project_Zeus",
+  "appId": "com.project.zeus",
+  "appName": "projectZeus",
   "bundledWebRuntime": false,
   "npmClient": "yarn",
   "webDir": "build"
