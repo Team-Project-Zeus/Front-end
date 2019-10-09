@@ -84,8 +84,9 @@ export default class Login extends Component<any, MyState> {
         this.redirect('/dashboard');
 
       }, (error) => {
+        console.log("error:")
         console.dir(error);
-        console.log(error.status);
+        console.log(error.response.status);
       })
 
   }
