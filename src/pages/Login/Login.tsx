@@ -1,12 +1,12 @@
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton, IonList, IonItem, IonLabel } from '@ionic/react';
-import React, { FormEvent, useState, Component } from 'react';
+import React, { FormEvent, Component } from 'react';
 import axios from 'axios';
 import { environment } from '../../enviroment';
 import store from '../../store/store';
 import * as user from '../../store/user/actions';
 import { errorCodes } from '../../utils/errorCodes';
 
-type MyProps = { errorMessage: string };
+// type MyProps = { errorMessage: string };
 type MyState = { email: string, password: string, errorMessage: string };
 
 export default class Login extends Component<any, MyState> {
@@ -72,7 +72,7 @@ export default class Login extends Component<any, MyState> {
     const formBodyString = formBody.join("&");
 
     //Sending post request to database for login
-    const data = await axios.post(environment.LOGIN_URL, formBodyString, this.config).then(response => response.data)
+    await axios.post(environment.LOGIN_URL, formBodyString, this.config).then(response => response.data)
       .then((data) => {
         const authToken = data['token'];
 
@@ -90,10 +90,10 @@ export default class Login extends Component<any, MyState> {
         console.log("error:")
         console.dir(error);
         console.log(error.response.status);
-        // if (error.response.status == 422) {
-        this.setState({ 'errorMessage': errorCodes[error.response.status] });
-        console.log(this.errorMessage);
-        // }
+        if (error.response.status === 422) {
+          this.setState({ 'errorMessage': errorCodes[422] });
+          console.log(this.errorMessage);
+        }
       })
 
   }

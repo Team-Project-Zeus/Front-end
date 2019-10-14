@@ -1,14 +1,10 @@
-import { createStore, applyMiddleware, compose, Middleware, combineReducers } from 'redux';
-// import { fetchLocationsMiddleware } from './locations/middleware';
-// import { fetchSessionsMiddleware } from './sessions/middleware';
-// import { fetchSpeakersMiddleware } from './speakers/middleware';
+import { createStore, compose, combineReducers } from 'redux';
 import user from './user/reducer'
 import { composeWithDevTools } from 'redux-devtools-extension';
-// import rootReducer from './root-reducer';
 
 const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-//initializels all the reducers
+//initialize all the reducers
 const rootReducer = combineReducers({
     user
 });
