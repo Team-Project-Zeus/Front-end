@@ -1,20 +1,20 @@
 
-import React, { FormEvent, useState } from 'react';
+import React from 'react';
 // @ts-ignore
 import { ReactAgenda, guid, Modal } from 'react-agenda';
 import './AgendaStyle.css';
 import './DateTimeStyle.css';
 import axios from 'axios';
-import { environment } from '../enviroment';
-import ModifiedReactAgendaItem from '../modifiedAgenda/modifiedReactAgendaItem';
-import ModifiedReactAgendaCtrl from '../modifiedAgenda/modifiedReactAgendaCtrl';
+import { environment } from '../../enviroment';
+import ModifiedReactAgendaItem from '../../modifiedAgenda/modifiedReactAgendaItem';
+import ModifiedReactAgendaCtrl from '../../modifiedAgenda/modifiedReactAgendaCtrl';
 
 
 require('moment/locale/nl.js');
 
 
 
-var date = { currentTime: new Date().toLocaleString() };
+// var date = { currentTime: new Date().toLocaleString() };
 
 type MyProps = { history: History };
 type MyState = {
@@ -66,7 +66,7 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
 
     componentDidMount() {
         axios.defaults.headers.common = { 'Authorization': `bearer ${localStorage.getItem('authToken')}` }
-        const data = axios.post(environment.API_URL + "/agenda/" + localStorage.getItem('useremail'), this.config).then(response => response.data)
+        axios.post(environment.API_URL + "/agenda/" + localStorage.getItem('useremail'), this.config).then(response => response.data)
             .then((data) => {
                 const items = [];
                 for (var x = 0; data['appointments'].length > x; x++) {
