@@ -1,7 +1,7 @@
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton, IonList, IonItem, IonLabel } from '@ionic/react';
 import React, { FormEvent, Component } from 'react';
 import axios from 'axios';
-import { environment } from '../../enviroment';
+// import { environment } from '../../enviroment';
 import store from '../../store/store';
 import * as user from '../../store/user/actions';
 import { errorCodes } from '../../utils/errorCodes';
@@ -72,7 +72,11 @@ export default class Login extends Component<any, MyState> {
     const formBodyString = formBody.join("&");
 
     //Sending post request to database for login
-    await axios.post(environment.LOGIN_URL, formBodyString, this.config).then(response => response.data)
+    console.log(process.env.REACT_APP_LOGIN_URL);
+    console.dir(process.env);
+
+    const loginUrl = process.env.REACT_APP_LOGIN_URL || '';
+    await axios.post(loginUrl, formBodyString, this.config).then(response => response.data)
       .then((data) => {
         const authToken = data['token'];
 

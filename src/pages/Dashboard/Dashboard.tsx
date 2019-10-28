@@ -5,7 +5,7 @@ import { ReactAgenda, guid, Modal } from 'react-agenda';
 import './AgendaStyle.css';
 import './DateTimeStyle.css';
 import axios from 'axios';
-import { environment } from '../../enviroment';
+// import { environment } from '../../enviroment';
 import ModifiedReactAgendaItem from '../../modifiedAgenda/modifiedReactAgendaItem';
 import ModifiedReactAgendaCtrl from '../../modifiedAgenda/modifiedReactAgendaCtrl';
 
@@ -66,7 +66,7 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
 
     componentDidMount() {
         axios.defaults.headers.common = { 'Authorization': `bearer ${localStorage.getItem('authToken')}` }
-        axios.post(environment.API_URL + "/agenda/" + localStorage.getItem('useremail'), this.config).then(response => response.data)
+        axios.post(process.env.REACT_APP_API_URL + "/agenda/" + localStorage.getItem('useremail'), this.config).then(response => response.data)
             .then((data) => {
                 const items = [];
                 for (var x = 0; data['appointments'].length > x; x++) {
