@@ -6,9 +6,6 @@ import Login from './pages/Login/Login';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
-// import './.env'
-// import './.env.production'
-
 
 /* Basic CSS for apps built with Ionic */
 import '@ionic/react/css/normalize.css';
@@ -31,21 +28,7 @@ import { PrivateRoute } from './utils/routing';
 import { Provider } from 'react-redux';
 import store from './store/store';
 
-
-// dotenv.config()
-
-// require('dotenv-webpack').config();
-
-// if (result.error) {
-//   throw result.error
-// }
-
-// console.log(result.parsed)
-// console.dir(result)
-
-
 const App: React.FunctionComponent = () => (
-
   <Provider store={store}>
     <IonApp>
       <IonReactRouter >
