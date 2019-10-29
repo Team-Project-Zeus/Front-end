@@ -74,15 +74,14 @@ export default class Login extends Component<any, MyState> {
     //Sending post request to database for login
     await axios.post(environment.LOGIN_URL, formBodyString, this.config).then(response => response.data)
       .then((data) => {
-        const authToken = data['token'];
+        const token = data['token'];
 
         //Storing user Data in redux
         store.dispatch(user.setEmail(email))
-        store.dispatch(user.setToken(authToken))
+        store.dispatch(user.setToken(token))
         store.dispatch(user.setName('test'))
         //Saving token in localStorage to stay logged in 
-        localStorage.setItem("token", authToken)
-
+        localStorage.setItem("token", token)
         //Redirecting to Dashboard
         this.redirect('/dashboard');
 
