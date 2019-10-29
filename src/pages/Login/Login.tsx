@@ -94,10 +94,22 @@ export default class Login extends Component<any, MyState> {
         console.log("error:")
         console.dir(error);
         console.log(error.response.status);
-        if (error.response.status === 422) {
-          this.setState({ 'errorMessage': errorCodes[422] });
-          console.log(this.errorMessage);
+        switch (error.response.status) {
+          case 422:
+            this.setState({ 'errorMessage': errorCodes[422] });
+            console.log(this.errorMessage);
+            break;
+          case 404:
+            this.setState({ 'errorMessage': errorCodes[404] });
+            console.log(this.errorMessage);
+            break;
+          default:
+            this.setState({ 'errorMessage': "onbekende error!" });
+            console.log(this.errorMessage);
+            break;
+
         }
+
       })
 
   }
