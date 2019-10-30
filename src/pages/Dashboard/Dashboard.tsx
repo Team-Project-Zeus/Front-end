@@ -68,7 +68,7 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
         console.dir(localStorage.getItem('token'));
 
         axios.defaults.headers.common = { 'Authorization': `bearer ${localStorage.getItem('token')}` }
-        axios.get(environment.APPOINTMENT_URL + "student", this.config).then(response => response.data)
+        axios.get(environment.APPOINTMENT_URL + "student/" + localStorage.getItem('id'), this.config).then(response => response.data)
             .then((data) => {
                 console.dir(data)
                 const items = [];
