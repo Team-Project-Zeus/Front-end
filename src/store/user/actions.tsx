@@ -20,3 +20,7 @@ export const setRole = createAction('user/SET_ROLE', resolve =>
 export const setToken = createAction('user/SET_TOKEN', resolve =>
     (token: string) => resolve(token)
 )
+
+export const setId = createAction('user/SET_ID', resolve =>
+    (id: string) => resolve(id)
+)
