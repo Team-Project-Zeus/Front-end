@@ -10,9 +10,7 @@ const defaultState: User = {
     name: null,
     role: 'default',
     isAuthenticated: false,
-    token: localStorage.getItem('token'),
-    id: localStorage.getItem('id')
-
+    token: localStorage.getItem('token')
 };
 
 export type UserAction = ActionType<typeof users>;
@@ -44,12 +42,6 @@ export default (state = defaultState, action: UserAction): User => {
             return {
                 ...state,
                 token: action.payload
-            }
-
-        case getType(users.setId):
-            return {
-                ...state,
-                id: action.payload
             }
 
         default:
