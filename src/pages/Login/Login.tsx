@@ -74,26 +74,44 @@ export default class Login extends Component<any, MyState> {
     //Sending post request to database for login
     await axios.post(environment.LOGIN_URL, formBodyString, this.config).then(response => response.data)
       .then((data) => {
-        const authToken = data['token'];
+        const token = data['token'];
 
         //Storing user Data in redux
         store.dispatch(user.setEmail(email))
-        store.dispatch(user.setToken(authToken))
+        store.dispatch(user.setToken(token))
         store.dispatch(user.setName('test'))
         //Saving token in localStorage to stay logged in 
-        localStorage.setItem("token", authToken)
-
+        localStorage.setItem("token", token)
         //Redirecting to Dashboard
         this.redirect('/dashboard');
 
       }, (error) => {
         console.log("error:")
-        console.dir(error);
-        console.log(error.response.status);
-        if (error.response.status === 422) {
-          this.setState({ 'errorMessage': errorCodes[422] });
-          console.log(this.errorMessage);
+        console.dir(error.message);
+        if (error.message == 'Network Error') {
+          this.setState({ 'errorMessage': errorCodes[404] });
+
         }
+        else {
+          console.log(error.response.status);
+
+          switch (error.response.status) {
+            case 422:
+              this.setState({ 'errorMessage': errorCodes[422] });
+              console.log(this.errorMessage);
+              break;
+            case 404:
+              this.setState({ 'errorMessage': errorCodes[404] });
+              console.log(this.errorMessage);
+              break;
+            default:
+              this.setState({ 'errorMessage': "onbekende error!" });
+              console.log(this.errorMessage);
+              break;
+
+          }
+        }
+
       })
 
   }
@@ -120,7 +138,7 @@ export default class Login extends Component<any, MyState> {
                 <IonInput name="password" type="password" value={this.state.password} onInput={(e: any) => this.handlePasswordChange(e)} />
               </IonItem>
               <IonButton type="submit">Log in</IonButton>
-              <IonItem><p>{this.state.errorMessage}</p></IonItem>
+              <IonItem  ><p style={{ color: 'red' }}>{this.state.errorMessage}</p></IonItem>
             </IonList>
           </form>
         </IonContent>

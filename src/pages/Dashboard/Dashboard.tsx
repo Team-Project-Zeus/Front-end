@@ -65,24 +65,33 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
     }
 
     componentDidMount() {
-        axios.defaults.headers.common = { 'Authorization': `bearer ${localStorage.getItem('authToken')}` }
-        axios.post(environment.API_URL + "/agenda/" + localStorage.getItem('useremail'), this.config).then(response => response.data)
+        console.dir(axios.defaults.headers.common);
+
+        axios.defaults.headers.common = { 'Authorization': `bearer ${localStorage.getItem('token')}` }
+        axios.get(environment.APPOINTMENT_URL + "student", this.config).then(response => response.data)
             .then((data) => {
+                console.dir(data)
                 const items = [];
-                for (var x = 0; data['appointments'].length > x; x++) {
-                    var item = {
-                        _id: guid(),
-                        name: data['appointments'][x].instructor,
-                        startDateTime: new Date(data['appointments'][x]['start-time']),
-                        endDateTime: new Date(data['appointments'][x]['end-time']),
-                        classes: 'color-2 color-3'
-                    }
-
-                    items.push(item)
+                if (typeof data === 'string') {
+                    return null;
                 }
+                else {
+                    for (var x = 0; data.length > x; x++) {
+                        console.log(data[x])
+                        var item = {
+                            _id: guid(),
+                            name: data[x].driving_instructor,
+                            startDateTime: new Date(data[x]['start_time']),
+                            endDateTime: new Date(data[x]['end_time']),
+                            classes: 'color-2 color-3'
+                        }
 
-                this.setState({ 'items': items });
-                return data
+                        items.push(item)
+                    }
+                    console.dir(items);
+                    this.setState({ 'items': items });
+                    return data
+                }
             })
     }
 
