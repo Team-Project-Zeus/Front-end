@@ -70,12 +70,7 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
         axios.defaults.headers.common = { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         console.dir(axios.defaults.headers.common);
 
-<<<<<<< HEAD
         axios.get(environment.APPOINTMENT_URL + "student/" + localStorage.getItem('id'), this.config).then(response => response.data)
-=======
-        axios.defaults.headers.common = { 'Authorization': `bearer ${localStorage.getItem('token')}` }
-        axios.get(environment.APPOINTMENT_URL + "student", this.config).then(response => response.data)
->>>>>>> parent of ef445e6... Working on making frontend compatible with test enviroment
             .then((data) => {
                 console.dir(data)
                 const items = [];
