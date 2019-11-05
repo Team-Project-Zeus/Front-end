@@ -65,27 +65,35 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
     }
 
     componentDidMount() {
-        console.dir(localStorage.getItem('token'));
+        console.dir(axios.defaults.headers.common);
 
-        axios.defaults.headers.common = { 'Authorization': `bearer ${localStorage.getItem('token')}` }
+        axios.defaults.headers.common = { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        console.dir(axios.defaults.headers.common);
+
         axios.get(environment.APPOINTMENT_URL + "student/" + localStorage.getItem('id'), this.config).then(response => response.data)
             .then((data) => {
                 console.dir(data)
                 const items = [];
-                for (var x = 0; data.length > x; x++) {
-                    var item = {
-                        _id: guid(),
-                        name: data[x].driving_instructor,
-                        startDateTime: new Date(data[x]['start_time']),
-                        endDateTime: new Date(data[x]['end_time']),
-                        classes: 'color-2 color-3'
-                    }
-
-                    items.push(item)
+                if (typeof data === 'string') {
+                    return null;
                 }
-                console.dir(items);
-                this.setState({ 'items': items });
-                return data
+                else {
+                    for (var x = 0; data.length > x; x++) {
+                        console.log(data[x])
+                        var item = {
+                            _id: guid(),
+                            name: data[x].driving_instructor,
+                            startDateTime: new Date(data[x]['start_time']),
+                            endDateTime: new Date(data[x]['end_time']),
+                            classes: 'color-2 color-3'
+                        }
+
+                        items.push(item)
+                    }
+                    console.dir(items);
+                    this.setState({ 'items': items });
+                    return data
+                }
             })
     }
 
