@@ -5,5 +5,4 @@ export class User {
      role: any;
      token: any;
      isAuthenticated: any;
-     id: any;
 }
