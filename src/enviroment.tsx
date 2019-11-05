@@ -2,7 +2,7 @@ export const environment = {
     production: false,
     environmentName: 'LOCAL',
     API_KEY: 'YOUR_API_KEY',
-    API_URL: `http://localhost:3000`,
-    LOGIN_URL: 'http://10.9.2.60:3000/login',
-
+    API_URL: `http://127.0.0.1:8000/api/`,
+    LOGIN_URL: 'http://127.0.0.1:8000/api/login',
+    APPOINTMENT_URL: 'http://127.0.0.1:8000/api/appointment/',
 };

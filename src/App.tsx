@@ -1,8 +1,8 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonPage, IonRouterOutlet } from '@ionic/react';
+import { IonApp, IonRouterOutlet } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import Home from './pages/Home';
+import Login from './pages/Login/Login';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -22,21 +22,31 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import Dashboard from './pages/Dashboard';
+import Dashboard from './pages/Dashboard/Dashboard';
+import LogOut from './pages/Logout/LogOut';
+import { PrivateRoute } from './utils/routing';
+import { Provider } from 'react-redux';
+import store from './store/store';
 
 const App: React.FunctionComponent = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonPage>
-        <IonRouterOutlet>
-          <Route path="/home" component={Home} exact={true} />
-          <Route path="/dashboard" component={Dashboard} exact={true} />
+  <Provider store={store}>
+    <IonApp>
+      <IonReactRouter >
+        {/* <IonPage> */}
+        <IonRouterOutlet >
+          <Route path="/dashboard">
+            <PrivateRoute path="/dashboard" component={Dashboard} />
+          </Route>
+          <Route forceRefresh={true} path="/login" component={Login} />
 
-          <Route exact path="/" render={() => <Redirect to="/home" />} />
+          <Route exact path="/" render={() => <Redirect to="/login" />} />
+          <Route forceRefresh={true} path="/logout" component={LogOut} exact={true} />
+
         </IonRouterOutlet>
-      </IonPage>
-    </IonReactRouter>
-  </IonApp>
+        {/* </IonPage> */}
+      </IonReactRouter>
+    </IonApp>
+  </Provider>
 );
 
 export default App;
