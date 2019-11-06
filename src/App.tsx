@@ -28,6 +28,14 @@ import { PrivateRoute } from './utils/routing';
 import { Provider } from 'react-redux';
 import store from './store/store';
 
+window.onload = function () {
+  if (window.location.protocol === "https:") {
+    console.log("https detected forcing http")
+    window.location.protocol = "http";
+  }
+
+}
+
 const App: React.FunctionComponent = () => (
   <Provider store={store}>
     <IonApp>
