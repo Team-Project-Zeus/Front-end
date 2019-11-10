@@ -27,10 +27,13 @@ import LogOut from './pages/Logout/LogOut';
 import { PrivateRoute } from './utils/routing';
 import { Provider } from 'react-redux';
 import store from './store/store';
+import { SideBar } from './utils/sideBar';
+
 
 const App: React.FunctionComponent = () => (
   <Provider store={store}>
     <IonApp>
+      <SideBar />
       <IonReactRouter >
         {/* <IonPage> */}
         <IonRouterOutlet >

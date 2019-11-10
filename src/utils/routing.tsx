@@ -21,7 +21,6 @@ const mapStateToProps = (state: any) => ({
 
 
 class PRoute extends Component<Props, MyState> {
-    componentDidMount() { console.log("test") }
 
     render() {
 
