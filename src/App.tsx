@@ -31,6 +31,14 @@ import { SideBar } from './utils/sideBar';
 import Welcome from './pages/Dashboard/Welcome';
 // 
 
+window.onload = function () {
+  if (window.location.protocol === "https:") {
+    console.log("https detected forcing http")
+    window.location.protocol = "http";
+  }
+
+}
+
 const App: React.FunctionComponent = () => (
   <Provider store={store}>
     <IonApp>
