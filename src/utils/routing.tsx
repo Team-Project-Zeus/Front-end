@@ -3,6 +3,7 @@ import { Route, Redirect } from 'react-router-dom';
 import { RouteComponentProps } from 'react-router';
 // import Tutorial from '../pages/Tutorial';
 import { connect } from 'react-redux';
+import { SideBar } from './sideBar';
 
 
 type Props = ReturnType<typeof mapStateToProps> & {
@@ -27,6 +28,7 @@ class PRoute extends Component<Props, MyState> {
         const Component = this.props.component;
         const routeRender = (props: any) => {
             if (this.props.user.token !== null) {
+
                 return React.createElement(Component, props);
             }
             return (

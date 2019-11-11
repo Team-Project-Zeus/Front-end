@@ -1,63 +1,57 @@
-import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem } from "@ionic/react";
+import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonMenuButton, IonButton, IonCol, IonRow, IonSplitPane } from "@ionic/react";
 
 import React, { Component } from 'react';
+import { Link } from "react-router-dom";
 
 
-class sideBar extends Component<any, any> {
 
+type Props = {
+  location: string;
+}
+
+class sideBar extends Component<Props, any> {
+
+  constructor(props: any) {
+    super(props);
+    console.log(this.props.location);
+    // !.setAttribute('disabled', 'disabled');
+    // var element = <HTMLInputElement> document.getElementById("btnExcel");
+
+  }
+  componentDidMount() {
+
+    console.log(this.props.location);
+    console.dir();
+    document.getElementById(this.props.location)!.setAttribute("disabled", "true");
+  }
   render() {
+    console.log("test");
     return (
       <>
-        <IonMenu side="start" menuId="first">
+        <IonMenuButton></IonMenuButton>
+        {/* <IonSplitPane> */}
+        <IonMenu menuId="first" contentId='content' >
           <IonHeader>
             <IonToolbar color="primary">
               <IonTitle>Start Menu</IonTitle>
             </IonToolbar>
           </IonHeader>
-          <IonContent >
+          <IonContent id='content' >
             <IonList>
-              <IonItem>Menu Item</IonItem>
-              <IonItem>Menu Item</IonItem>
-              <IonItem>Menu Item</IonItem>
-              <IonItem>Menu Item</IonItem>
-              < IonItem>Menu Item</IonItem>
+              <IonRow>
+                <Link to="/home">
+                  <IonButton id="welcome">home</IonButton>
+                </Link>
+              </IonRow>
+              <IonRow>
+                <Link to="/dashboard">
+                  <IonButton id="dashboard">dashboard</IonButton>
+                </Link>
+              </IonRow>
             </IonList>
           </IonContent>
         </IonMenu>
-
-        <IonMenu side="start" menuId="custom" class="my-custom-menu">
-          <IonHeader>
-            <IonToolbar color="tertiary">
-              <IonTitle>Custom Menu</IonTitle>
-            </IonToolbar>
-          </IonHeader>
-          <IonContent >
-            <IonList>
-              <IonItem>Menu Item</IonItem>
-              <IonItem>Menu Item</IonItem>
-              <IonItem>Menu Item</IonItem>
-              <IonItem>Menu Item</IonItem>
-              < IonItem>Menu Item</IonItem>
-            </IonList>
-          </IonContent>
-        </IonMenu>
-
-        <IonMenu side="end" type="push">
-          <IonHeader>
-            <IonToolbar color="danger">
-              <IonTitle>End Menu</IonTitle>
-            </IonToolbar>
-          </IonHeader>
-          <IonContent >
-            <IonList>
-              <IonItem>Menu Item</IonItem>
-              <IonItem>Menu Item</IonItem>
-              <IonItem>Menu Item</IonItem>
-              <IonItem>Menu Item</IonItem>
-              < IonItem>Menu Item</IonItem>
-            </IonList>
-          </IonContent>
-        </IonMenu>
+        {/* </IonSplitPane> */}
 
       </>)
   }
