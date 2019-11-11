@@ -1,6 +1,6 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet } from '@ionic/react';
+import { IonApp, IonRouterOutlet, IonSplitPane, IonToolbar, IonTitle, IonPage, IonMenu, IonHeader, IonContent, IonList, IonItem } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Login from './pages/Login/Login';
 
@@ -27,34 +27,33 @@ import LogOut from './pages/Logout/LogOut';
 import { PrivateRoute } from './utils/routing';
 import { Provider } from 'react-redux';
 import store from './store/store';
-
-window.onload = function () {
-  if (window.location.protocol === "https:") {
-    console.log("https detected forcing http")
-    window.location.protocol = "http";
-  }
-
-}
+import { SideBar } from './utils/sideBar';
+import Welcome from './pages/Dashboard/Welcome';
+// 
 
 const App: React.FunctionComponent = () => (
   <Provider store={store}>
     <IonApp>
       <IonReactRouter >
-        {/* <IonPage> */}
-        <IonRouterOutlet >
-          <Route path="/dashboard">
-            <PrivateRoute path="/dashboard" component={Dashboard} />
-          </Route>
-          <Route forceRefresh={true} path="/login" component={Login} />
+        <IonPage id='content'>
+          <IonRouterOutlet >
+            <Route path="/dashboard">
+              <PrivateRoute path="/dashboard" component={Dashboard} />
+            </Route>
+            <Route path="/home">
+              <PrivateRoute path="/home" component={Welcome} />
+            </Route>
+            <Route forceRefresh={true} path="/login" component={Login} />
 
-          <Route exact path="/" render={() => <Redirect to="/login" />} />
-          <Route forceRefresh={true} path="/logout" component={LogOut} exact={true} />
+            <Route exact path="/" render={() => <Redirect to="/login" />} />
+            <Route forceRefresh={true} path="/logout" component={LogOut} exact={true} />
 
-        </IonRouterOutlet>
-        {/* </IonPage> */}
+          </IonRouterOutlet>
+        </IonPage>
       </IonReactRouter>
+      {/* </IonSplitPane> */}
     </IonApp>
-  </Provider>
+  </Provider >
 );
 
 export default App;

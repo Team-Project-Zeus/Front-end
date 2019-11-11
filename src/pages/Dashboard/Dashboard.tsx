@@ -8,6 +8,8 @@ import axios from 'axios';
 import { environment } from '../../enviroment';
 import ModifiedReactAgendaItem from '../../modifiedAgenda/modifiedReactAgendaItem';
 import ModifiedReactAgendaCtrl from '../../modifiedAgenda/modifiedReactAgendaCtrl';
+import { SideBar } from '../../utils/sideBar';
+import { IonRow, IonSplitPane } from '@ionic/react';
 
 
 require('moment/locale/nl.js');
@@ -127,6 +129,14 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
     render() {
         return (
             <div>
+
+                {/* <IonSplitPane> */}
+                <IonRow id="toprow">
+                    <SideBar location='dashboard' />
+                    <p>Title</p>
+                </IonRow>
+                {/* </IonSplitPane> */}
+                {/* <IonSplitPane> */}
                 <ReactAgenda
                     minDate={now}
                     maxDate={new Date(now.getFullYear(), now.getMonth() + 3)}
@@ -152,7 +162,9 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
                         </div>
                     </Modal> : ''
                 }
+                {/* </IonSplitPane> */}
             </div>
+
         );
     }
 }
