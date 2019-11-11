@@ -41,11 +41,12 @@ window.onload = function () {
 const App: React.FunctionComponent = () => (
   <Provider store={store}>
     <IonApp>
-      <SideBar />
+      {/* <SideBar /> */}
       <IonReactRouter >
         {/* <IonPage> */}
         <IonRouterOutlet >
           <Route path="/dashboard">
+            <SideBar />
             <PrivateRoute path="/dashboard" component={Dashboard} />
           </Route>
           <Route forceRefresh={true} path="/login" component={Login} />
