@@ -2,7 +2,8 @@
 ion-menu {
  /* background-color:black; */
     /* display:inline; */
-    /* max-width: 150px!important; */
+    /* width: 100%;
+    max-width: 250px; */
 }
 ion-menu > * > * > * > * > ion-button
    {
@@ -19,4 +20,5 @@ ion-menu > * > * > * > * > ion-button
 #logout > ion-button {
     /* width: 100%; */
     display:block;
+    
 }

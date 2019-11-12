@@ -11,7 +11,11 @@ import ModifiedReactAgendaItem from '../../modifiedAgenda/modifiedReactAgendaIte
 import ModifiedReactAgendaCtrl from '../../modifiedAgenda/modifiedReactAgendaCtrl';
 
 import { SideBar } from '../../utils/sideBar';
-import { IonRow } from '@ionic/react';
+// import {  } from '@ionic/react';
+import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonMenuButton, IonButton, IonCol, IonRow, IonSplitPane, IonPage } from "@ionic/react";
+import { Link } from 'react-router-dom';
+import '../../theme/styling.css';
+
 
 require('moment/locale/nl.js');
 
@@ -94,7 +98,7 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
                 }
             })
     }
-    
+
     handleCellSelection(item: any) {
         console.log('handleCellSelection', item);
     }
@@ -125,38 +129,70 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
     render() {
         return (
             <div>
-                <IonRow id="toprow">
-                    <SideBar location='dashboard' />
-                    <p>Title</p>
-                </IonRow>
-                <ReactAgenda
-                    minDate={now}
-                    maxDate={new Date(now.getFullYear(), now.getMonth() + 3)}
-                    disablePrevButton={false}
-                    startDate={this.state.startDate}
-                    startAtTime={this.state.startAtTime}
+                <IonSplitPane contentId='content2'>
+                 
+                    <IonMenu contentId='content2' type='push' >
+                        <IonContent>
+                            <IonHeader>
+                                <IonToolbar color="primary">
+                                    <IonTitle>Start Menu</IonTitle>
+                                </IonToolbar>
+                            </IonHeader>
+                            <IonList>
+                                <IonRow >
+                                    <Link to="/home">
+                                        <IonButton id="welcome">home</IonButton>
+                                    </Link>
+                                </IonRow>
+                                <IonRow>
+                                    <Link to="/dashboard">
+                                        <IonButton id="dashboard">dashboard</IonButton>
+                                    </Link>
+                                </IonRow>
+                            </IonList>
+                        </IonContent>
+                        <IonRow>
+                            <Link id="logout" to="/logout">
+                                <IonButton>logout</IonButton>
+                            </Link>
+                        </IonRow>
+                    </IonMenu>
+
+                    <IonPage id='content2'>
+                        <IonRow id="toprow">
+                            <IonMenuButton></IonMenuButton>
+                        </IonRow>
+                        <ReactAgenda
+                            minDate={now}
+                            maxDate={new Date(now.getFullYear(), now.getMonth() + 3)}
+                            disablePrevButton={false}
+                            startDate={this.state.startDate}
+                            cellHeight={this.state.cellHeight}
+                            locale={this.state.locale}
+                            items={this.state.items}
+                            numberOfDays={this.state.numberOfDays}
+                            rowsPerHour={this.state.rowsPerHour}
+                            itemColors={colors}
+                            autoScale={false}
+                            fixedHeader={true}
+                            onItemEdit={this.handleItemEdit.bind(this)}
+                            itemComponent={ModifiedReactAgendaItem}
+                            onCellSelect={this.handleCellSelection.bind(this)}
+                               startAtTime={this.state.startAtTime}
                     endAtTime={this.state.endAtTime}
 
-                    cellHeight={this.state.cellHeight}
-                    locale={this.state.locale}
-                    items={this.state.items}
-                    numberOfDays={this.state.numberOfDays}
-                    rowsPerHour={this.state.rowsPerHour}
-                    itemColors={colors}
-                    autoScale={false}
-                    fixedHeader={true}
-                    onItemEdit={this.handleItemEdit.bind(this)}
-                    itemComponent={ModifiedReactAgendaItem}
-                    onCellSelect={this.handleCellSelection.bind(this)}
-                    onRangeSelection={this.handleRangeSelection.bind(this)} />
-                {
-                    this.state.showModal ? <Modal clickOutside={this._closeModal} >
-                        <div className="modal-content">
-                            <ModifiedReactAgendaCtrl items={this.state.items} itemColors={colors} selectedCells={this.state.selected} />
+                            onRangeSelection={this.handleRangeSelection.bind(this)} />
+                        {
+                            this.state.showModal ? <Modal clickOutside={this._closeModal} >
+                                <div className="modal-content">
+                                    <ModifiedReactAgendaCtrl items={this.state.items} itemColors={colors} selectedCells={this.state.selected} />
+                                </div>
+                            </Modal> : ''
 
-                        </div>
-                    </Modal> : ''
-                }
+                        }
+                    </IonPage>
+                </IonSplitPane>
+
             </div>
 
         );
