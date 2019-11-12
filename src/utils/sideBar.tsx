@@ -2,6 +2,8 @@ import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem,
 
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
+import '../theme/styling.css';
+
 
 
 
@@ -20,14 +22,14 @@ class sideBar extends Component<Props, any> {
       <>
         <IonMenuButton></IonMenuButton>
         <IonMenu menuId="first" contentId='content' >
-          <IonHeader>
-            <IonToolbar color="primary">
-              <IonTitle>Start Menu</IonTitle>
-            </IonToolbar>
-          </IonHeader>
-          <IonContent id='content' >
+          <IonContent>
+            <IonHeader>
+              <IonToolbar color="primary">
+                <IonTitle>Start Menu</IonTitle>
+              </IonToolbar>
+            </IonHeader>
             <IonList>
-              <IonRow>
+              <IonRow >
                 <Link to="/home">
                   <IonButton id="welcome">home</IonButton>
                 </Link>
@@ -37,13 +39,15 @@ class sideBar extends Component<Props, any> {
                   <IonButton id="dashboard">dashboard</IonButton>
                 </Link>
               </IonRow>
-              <IonRow>
-                <Link to="/logout">
-                  <IonButton id="logout">logout</IonButton>
-                </Link>
-              </IonRow>
+
             </IonList>
+
           </IonContent>
+          <IonRow>
+            <Link id="logout" to="/logout">
+              <IonButton>logout</IonButton>
+            </Link>
+          </IonRow>
         </IonMenu>
 
 

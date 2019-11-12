@@ -1,5 +1,22 @@
 
 ion-menu {
+ /* background-color:black; */
     /* display:inline; */
     /* max-width: 150px!important; */
+}
+ion-menu > * > * > * > * > ion-button
+   {
+        display:block;
+    }
+    ion-menu > * > * > * > a
+   {
+        width: 100%;
+    }
+#logout {
+    width: 100%;
+    /* display:block; */
+}
+#logout > ion-button {
+    /* width: 100%; */
+    display:block;
 }
