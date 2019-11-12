@@ -1,6 +1,7 @@
 import { IonHeader, IonToolbar, IonTitle, IonText, IonContent } from "@ionic/react";
 import React from 'react';
 import store from "../../store/store";
+import { Redirect } from "react-router";
 
 
 
@@ -16,8 +17,17 @@ export default class LogOut extends React.Component {
     //Sends reset to store
     store.dispatch({
       type: 'RESET'
-    })
+    });
+    window.setTimeout(function () {
+      // Move to a new location or you can do something else
+      props.history.push('login');
+    }, 5000);
   }
+
+  compomentDidMount() {
+
+  }
+
 
 
 
