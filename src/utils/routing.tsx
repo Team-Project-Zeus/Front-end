@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { RouteComponentProps } from 'react-router';
-// import Tutorial from '../pages/Tutorial';
 import { connect } from 'react-redux';
-import { SideBar } from './sideBar';
 
 
 type Props = ReturnType<typeof mapStateToProps> & {

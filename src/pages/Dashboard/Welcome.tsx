@@ -7,15 +7,10 @@ export default class Welcome extends React.Component<any, any> {
         return (
 
             <IonContent>
-                {/* <IonSplitPane> */}
                 <IonRow id="toprow">
                     <SideBar location="welcome" />
-                    <p>Title</p>
                 </IonRow>
-                {/* <Ionmain> */}
                 <IonText>Welcome!</IonText>
-                {/* </Ionmain> */}
-                {/* </IonSplitPane> */}
             </IonContent>
         )
     }

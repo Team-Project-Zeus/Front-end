@@ -11,25 +11,14 @@ type Props = {
 
 class sideBar extends Component<Props, any> {
 
-  constructor(props: any) {
-    super(props);
-    console.log(this.props.location);
-    // !.setAttribute('disabled', 'disabled');
-    // var element = <HTMLInputElement> document.getElementById("btnExcel");
-
-  }
   componentDidMount() {
-
-    console.log(this.props.location);
-    console.dir();
     document.getElementById(this.props.location)!.setAttribute("disabled", "true");
   }
+
   render() {
-    console.log("test");
     return (
       <>
         <IonMenuButton></IonMenuButton>
-        {/* <IonSplitPane> */}
         <IonMenu menuId="first" contentId='content' >
           <IonHeader>
             <IonToolbar color="primary">
@@ -48,10 +37,15 @@ class sideBar extends Component<Props, any> {
                   <IonButton id="dashboard">dashboard</IonButton>
                 </Link>
               </IonRow>
+              <IonRow>
+                <Link to="/logout">
+                  <IonButton id="logout">logout</IonButton>
+                </Link>
+              </IonRow>
             </IonList>
           </IonContent>
         </IonMenu>
-        {/* </IonSplitPane> */}
+
 
       </>)
   }

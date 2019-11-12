@@ -12,7 +12,7 @@ type MyState = { email: string, password: string, errorMessage: string };
 export default class Login extends Component<any, MyState> {
 
   config = {
-    headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' }
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' }
   };
   errorMessage: any
 
