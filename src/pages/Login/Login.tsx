@@ -83,7 +83,7 @@ export default class Login extends Component<any, MyState> {
         //Saving token in localStorage to stay logged in 
         localStorage.setItem("token", token)
         //Redirecting to Dashboard
-        this.redirect('/dashboard');
+        this.redirect('/home');
 
       }, (error) => {
         console.log("error:")
