@@ -26,6 +26,8 @@ type MyState = {
     rowsPerHour: 2,
     numberOfDays: 5,
     startDate: Date,
+    startAtTime: 6,
+    endAtTime: 23,
 };
 
 var colors = {
@@ -50,6 +52,8 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
             rowsPerHour: 2,
             numberOfDays: 5,
             startDate: new Date(),
+            startAtTime: 6,
+            endAtTime: 23,
         };
 
         this.setState({ 'startDate': now });
@@ -130,6 +134,9 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
                     maxDate={new Date(now.getFullYear(), now.getMonth() + 3)}
                     disablePrevButton={false}
                     startDate={this.state.startDate}
+                    startAtTime={this.state.startAtTime}
+                    endAtTime={this.state.endAtTime}
+
                     cellHeight={this.state.cellHeight}
                     locale={this.state.locale}
                     items={this.state.items}
