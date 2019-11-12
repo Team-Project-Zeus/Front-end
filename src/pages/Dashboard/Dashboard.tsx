@@ -130,12 +130,12 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
         return (
             <div>
                 <IonSplitPane contentId='content2'>
-                 
+
                     <IonMenu contentId='content2' type='push' >
                         <IonContent>
                             <IonHeader>
                                 <IonToolbar color="primary">
-                                    <IonTitle>Start Menu</IonTitle>
+                                    <IonTitle>Menu</IonTitle>
                                 </IonToolbar>
                             </IonHeader>
                             <IonList>
@@ -160,7 +160,13 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
 
                     <IonPage id='content2'>
                         <IonRow id="toprow">
+                            <IonHeader>
+                                <IonToolbar color="primary">
+                                    <IonTitle>Home</IonTitle>
+                                </IonToolbar>
+                            </IonHeader>
                             <IonMenuButton></IonMenuButton>
+
                         </IonRow>
                         <ReactAgenda
                             minDate={now}
@@ -178,8 +184,8 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
                             onItemEdit={this.handleItemEdit.bind(this)}
                             itemComponent={ModifiedReactAgendaItem}
                             onCellSelect={this.handleCellSelection.bind(this)}
-                               startAtTime={this.state.startAtTime}
-                    endAtTime={this.state.endAtTime}
+                            startAtTime={this.state.startAtTime}
+                            endAtTime={this.state.endAtTime}
 
                             onRangeSelection={this.handleRangeSelection.bind(this)} />
                         {

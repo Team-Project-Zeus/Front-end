@@ -1,5 +1,5 @@
 import React from 'react';
-import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonMenuButton, IonButton, IonCol, IonRow, IonSplitPane, IonPage, IonText } from "@ionic/react";
+import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonMenuButton, IonButton, IonCol, IonRow, IonSplitPane, IonPage, IonText, IonLabel } from "@ionic/react";
 import { Link } from 'react-router-dom';
 import '../../theme/styling.css';
 
@@ -14,7 +14,7 @@ export default class Welcome extends React.Component<any, any> {
                     <IonContent>
                         <IonHeader>
                             <IonToolbar color="primary">
-                                <IonTitle>Start Menu</IonTitle>
+                                <IonTitle>Menu</IonTitle>
                             </IonToolbar>
                         </IonHeader>
                         <IonList>
@@ -38,10 +38,18 @@ export default class Welcome extends React.Component<any, any> {
                 </IonMenu>
 
                 <IonPage id='content2'>
+
                     <IonRow id="toprow">
                         <IonMenuButton></IonMenuButton>
+                        <IonHeader>
+                            <IonToolbar color="primary">
+                                <IonTitle>Home</IonTitle>
+                            </IonToolbar>
+                        </IonHeader>
                     </IonRow>
-                    <IonText>Welcome!</IonText>
+                    <IonRow>
+                        <IonTitle>Welcome!</IonTitle>
+                    </IonRow>
                 </IonPage>
             </IonSplitPane>
 
