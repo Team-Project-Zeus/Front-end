@@ -10,8 +10,6 @@ import { environment } from '../../enviroment';
 import ModifiedReactAgendaItem from '../../modifiedAgenda/modifiedReactAgendaItem';
 import ModifiedReactAgendaCtrl from '../../modifiedAgenda/modifiedReactAgendaCtrl';
 
-import { SideBar } from '../../utils/sideBar';
-// import {  } from '@ionic/react';
 import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonMenuButton, IonButton, IonCol, IonRow, IonSplitPane, IonPage } from "@ionic/react";
 import { Link } from 'react-router-dom';
 import '../../theme/styling.css';
@@ -162,7 +160,7 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
                         <IonRow id="toprow">
                             <IonHeader>
                                 <IonToolbar color="primary">
-                                    <IonTitle>Home</IonTitle>
+                                    <IonTitle>Dashboard</IonTitle>
                                 </IonToolbar>
                             </IonHeader>
                             <IonMenuButton></IonMenuButton>
