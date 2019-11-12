@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { RouteComponentProps } from 'react-router';
-// import Tutorial from '../pages/Tutorial';
 import { connect } from 'react-redux';
 
 
@@ -21,13 +20,13 @@ const mapStateToProps = (state: any) => ({
 
 
 class PRoute extends Component<Props, MyState> {
-    componentDidMount() { console.log("test") }
 
     render() {
 
         const Component = this.props.component;
         const routeRender = (props: any) => {
             if (this.props.user.token !== null) {
+
                 return React.createElement(Component, props);
             }
             return (

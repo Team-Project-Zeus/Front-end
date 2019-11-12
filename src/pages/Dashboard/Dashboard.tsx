@@ -6,15 +6,15 @@ import './AgendaStyle.css';
 import './DateTimeStyle.css';
 import axios from 'axios';
 import { environment } from '../../enviroment';
+
 import ModifiedReactAgendaItem from '../../modifiedAgenda/modifiedReactAgendaItem';
 import ModifiedReactAgendaCtrl from '../../modifiedAgenda/modifiedReactAgendaCtrl';
 
+import { SideBar } from '../../utils/sideBar';
+import { IonRow } from '@ionic/react';
 
 require('moment/locale/nl.js');
 
-
-
-// var date = { currentTime: new Date().toLocaleString() };
 
 type MyProps = { history: History };
 type MyState = {
@@ -37,9 +37,6 @@ var colors = {
 var now = new Date();
 
 export default class Dashboard extends React.Component<MyProps, MyState> {
-    config = {
-        headers: { 'Access-Control-Allow-Origin': '*' }
-    };
 
     constructor(props: any) {
 
@@ -54,6 +51,7 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
             numberOfDays: 5,
             startDate: new Date(),
         };
+
         this.setState({ 'startDate': now });
 
 
@@ -68,16 +66,15 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
         console.dir(axios.defaults.headers.common);
 
         axios.defaults.headers.common = { 'Authorization': `bearer ${localStorage.getItem('token')}` }
-        axios.get(environment.APPOINTMENT_URL + "student", this.config).then(response => response.data)
+
+        axios.get(environment.APPOINTMENT_URL + "student").then(response => response.data)
             .then((data) => {
-                console.dir(data)
                 const items = [];
                 if (typeof data === 'string') {
                     return null;
                 }
                 else {
                     for (var x = 0; data.length > x; x++) {
-                        console.log(data[x])
                         var item = {
                             _id: guid(),
                             name: data[x].driving_instructor,
@@ -88,16 +85,16 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
 
                         items.push(item)
                     }
-                    console.dir(items);
                     this.setState({ 'items': items });
                     return data
                 }
             })
     }
-
+    
     handleCellSelection(item: any) {
         console.log('handleCellSelection', item);
     }
+
     handleItemEdit(item: any) {
         if (item && this.state.showModal === false) {
             this.setState({ 'selected': [item] });
@@ -107,9 +104,6 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
     }
 
     _openModal() {
-        console.log('test');
-
-
         this.setState({ 'showModal': true })
     }
     _closeModal(e: any) {
@@ -127,6 +121,10 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
     render() {
         return (
             <div>
+                <IonRow id="toprow">
+                    <SideBar location='dashboard' />
+                    <p>Title</p>
+                </IonRow>
                 <ReactAgenda
                     minDate={now}
                     maxDate={new Date(now.getFullYear(), now.getMonth() + 3)}
@@ -153,6 +151,7 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
                     </Modal> : ''
                 }
             </div>
+
         );
     }
 }
