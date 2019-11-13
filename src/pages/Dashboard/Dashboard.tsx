@@ -199,7 +199,7 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
 
                             onRangeSelection={this.handleRangeSelection.bind(this)} />
                         <IonButton>
-                            <i class="material-icons">face</i>
+                            {/* <i class="material-icons">face</i> */}
                         </IonButton>
                         {
                             this.state.showEdit ? <Modal clickOutside={this._closeEdit} >
