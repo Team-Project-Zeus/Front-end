@@ -13,6 +13,7 @@ import ModifiedReactAgendaCtrl from '../../modifiedAgenda/modifiedReactAgendaCtr
 import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonMenuButton, IonButton, IonCol, IonRow, IonSplitPane, IonPage } from "@ionic/react";
 import { Link } from 'react-router-dom';
 import '../../theme/styling.css';
+import { Icon } from 'ionicons/dist/types/icon/icon';
 
 
 require('moment/locale/nl.js');
@@ -23,7 +24,8 @@ type MyState = {
     items: any,
     selected: any,
     cellHeight: 30,
-    showModal: boolean,
+    showEdit: boolean,
+    showCreate: boolean,
     locale: "nl",
     rowsPerHour: 2,
     numberOfDays: 5,
@@ -49,7 +51,8 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
             items: [],
             selected: [],
             cellHeight: 30,
-            showModal: false,
+            showEdit: false,
+            showCreate: false,
             locale: "nl",
             rowsPerHour: 2,
             numberOfDays: 5,
@@ -63,8 +66,10 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
 
         this.handleCellSelection = this.handleCellSelection.bind(this);
         this.handleItemEdit = this.handleItemEdit.bind(this);
-        this._openModal = this._openModal.bind(this)
-        this._closeModal = this._closeModal.bind(this)
+        this._openEdit = this._openEdit.bind(this)
+        this._closeEdit = this._closeEdit.bind(this)
+        this._closeCreate = this._closeCreate.bind(this)
+
         this.handleRangeSelection = this.handleRangeSelection.bind(this);
     }
 
@@ -102,22 +107,29 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
     }
 
     handleItemEdit(item: any) {
-        if (item && this.state.showModal === false) {
+        if (item && this.state.showEdit === false) {
             this.setState({ 'selected': [item] });
-            this._closeModal("test");
-            return this._openModal();
+            this._closeEdit("test");
+            return this._openEdit();
         }
     }
 
-    _openModal() {
-        this.setState({ 'showModal': true })
+    _openEdit() {
+        this.setState({ 'showEdit': true })
     }
-    _closeModal(e: any) {
+    _closeEdit(e: any) {
         // if (e) {
         //     e.stopPropagation();
         //     e.preventDefault();
         // }
-        this.setState({ 'showModal': false })
+        this.setState({ 'showEdit': false })
+    }
+    _closeCreate(e: any) {
+        // if (e) {
+        //     e.stopPropagation();
+        //     e.preventDefault();
+        // }
+        this.setState({ 'showCreate': false })
     }
 
     handleRangeSelection(item: any) {
@@ -186,8 +198,19 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
                             endAtTime={this.state.endAtTime}
 
                             onRangeSelection={this.handleRangeSelection.bind(this)} />
+                        <IonButton>
+                            <i class="material-icons">face</i>
+                        </IonButton>
                         {
-                            this.state.showModal ? <Modal clickOutside={this._closeModal} >
+                            this.state.showEdit ? <Modal clickOutside={this._closeEdit} >
+                                <div className="modal-content">
+                                    <ModifiedReactAgendaCtrl items={this.state.items} itemColors={colors} selectedCells={this.state.selected} />
+                                </div>
+                            </Modal> : ''
+
+                        }
+                        {
+                            this.state.showCreate ? <Modal clickOutside={this._closeCreate} >
                                 <div className="modal-content">
                                     <ModifiedReactAgendaCtrl items={this.state.items} itemColors={colors} selectedCells={this.state.selected} />
                                 </div>
