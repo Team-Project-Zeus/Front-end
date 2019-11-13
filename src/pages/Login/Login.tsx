@@ -12,7 +12,7 @@ type MyState = { email: string, password: string, errorMessage: string };
 export default class Login extends Component<any, MyState> {
 
   config = {
-    headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' }
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' }
   };
   errorMessage: any
 
@@ -71,12 +71,11 @@ export default class Login extends Component<any, MyState> {
     }
     const formBodyString = formBody.join("&");
 
-    //Sending post request to database for login
     await axios.post(environment.LOGIN_URL, formBodyString, this.config).then(response => response.data)
       .then((data) => {
         const token = data['token'];
 
-        //Storing user Data in redux
+        //Storing user Data in redux, this is needed to update the state of the protected routing
         store.dispatch(user.setEmail(email))
         store.dispatch(user.setToken(token))
         store.dispatch(user.setName('test'))
@@ -86,7 +85,6 @@ export default class Login extends Component<any, MyState> {
         this.redirect('/home');
 
       }, (error) => {
-        console.log("error:")
         console.dir(error.message);
         if (error.message == 'Network Error') {
           this.setState({ 'errorMessage': errorCodes[404] });
@@ -102,6 +100,10 @@ export default class Login extends Component<any, MyState> {
               break;
             case 404:
               this.setState({ 'errorMessage': errorCodes[404] });
+              console.log(this.errorMessage);
+              break;
+            case 429:
+              this.setState({ 'errorMessage': errorCodes[429] });
               console.log(this.errorMessage);
               break;
             default:
