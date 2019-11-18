@@ -198,8 +198,8 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
                             endAtTime={this.state.endAtTime}
 
                             onRangeSelection={this.handleRangeSelection.bind(this)} />
-                        <IonButton>
-                            {/* <i class="material-icons">face</i> */}
+                        <IonButton float-right >
+                            Toevoegen
                         </IonButton>
                         {
                             this.state.showEdit ? <Modal clickOutside={this._closeEdit} >
