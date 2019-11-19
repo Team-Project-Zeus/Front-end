@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 // @ts-ignore
 import { ReactAgenda, guid, Modal } from 'react-agenda';
 import './AgendaStyle.css';
@@ -10,10 +10,11 @@ import { environment } from '../../enviroment';
 import ModifiedReactAgendaItem from '../../modifiedAgenda/modifiedReactAgendaItem';
 import ModifiedReactAgendaCtrl from '../../modifiedAgenda/modifiedReactAgendaCtrl';
 
-import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonMenuButton, IonButton, IonCol, IonRow, IonSplitPane, IonPage } from "@ionic/react";
+import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonMenuButton, IonButton, IonCol, IonRow, IonSplitPane, IonPage, IonFabButton, IonFab, IonIcon, IonModal } from "@ionic/react";
 import { Link } from 'react-router-dom';
 import '../../theme/styling.css';
 import { Icon } from 'ionicons/dist/types/icon/icon';
+import { add } from 'ionicons/icons';
 
 
 require('moment/locale/nl.js');
@@ -73,6 +74,7 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
         this.handleRangeSelection = this.handleRangeSelection.bind(this);
     }
 
+
     componentDidMount() {
         console.dir(axios.defaults.headers.common);
 
@@ -114,6 +116,11 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
         }
     }
 
+
+    _openCreate() {
+        console.log("opening creeate!");
+        this.setState({ 'showCreate': true })
+    }
     _openEdit() {
         this.setState({ 'showEdit': true })
     }
@@ -137,6 +144,8 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
     }
 
     render() {
+
+
         return (
             <div>
                 <IonSplitPane contentId='content2'>
@@ -198,9 +207,15 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
                             endAtTime={this.state.endAtTime}
 
                             onRangeSelection={this.handleRangeSelection.bind(this)} />
-                        <IonButton float-right >
-                            Toevoegen
-                        </IonButton>
+                        <IonModal isOpen={this.state.showCreate}>
+                            <p>This is modal content</p>
+                            <IonButton onClick={() => this._closeCreate}>Close Modal</IonButton>
+                        </IonModal>
+                        <IonFab vertical="bottom" horizontal="end" >
+                            <IonButton onClick={() => this._openCreate()}>
+                                <IonIcon icon={add} />
+                            </IonButton>
+                        </IonFab>
                         {
                             this.state.showEdit ? <Modal clickOutside={this._closeEdit} >
                                 <div className="modal-content">
@@ -220,7 +235,7 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
                     </IonPage>
                 </IonSplitPane>
 
-            </div>
+            </div >
 
         );
     }
