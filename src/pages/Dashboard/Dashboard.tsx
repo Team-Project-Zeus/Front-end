@@ -246,7 +246,7 @@ export default class Dashboard extends React.Component<any, MyState> {
                             onRangeSelection={this.handleRangeSelection.bind(this)} />
                         <IonModal isOpen={this.state.showCreate}>
                             <p>This is modal content</p>
-                            <IonButton onClick={() => this._closeCreate}>Close Modal</IonButton>
+                            <IonButton onClick={() => this._closeCreate(this)}>Close Modal</IonButton>
                         </IonModal>
 
                         <IonFab vertical="bottom" horizontal="end" >
@@ -262,14 +262,14 @@ export default class Dashboard extends React.Component<any, MyState> {
                             </Modal> : ''
 
                         }
-                        {
+                        {/* {
                             this.state.showCreate ? <Modal clickOutside={this._closeCreate} >
                                 <div className="modal-content">
                                     <ModifiedReactAgendaCtrl items={this.state.items} itemColors={colors} selectedCells={this.state.selected} />
                                 </div>
                             </Modal> : ''
 
-                        }
+                        } */}
 
                         <IonAlert
                             isOpen={this.state.showError}
