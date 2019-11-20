@@ -10,22 +10,24 @@ import { environment } from '../../enviroment';
 import ModifiedReactAgendaItem from '../../modifiedAgenda/modifiedReactAgendaItem';
 import ModifiedReactAgendaCtrl from '../../modifiedAgenda/modifiedReactAgendaCtrl';
 
-import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonMenuButton, IonButton, IonCol, IonRow, IonSplitPane, IonPage, IonFabButton, IonFab, IonIcon, IonModal } from "@ionic/react";
+import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonMenuButton, IonButton, IonCol, IonRow, IonSplitPane, IonPage, IonFabButton, IonFab, IonIcon, IonModal, IonAlert } from "@ionic/react";
 import { Link } from 'react-router-dom';
 import '../../theme/styling.css';
 import { add } from 'ionicons/icons';
+import { createError } from '../../utils/errorCodes';
 
 
 require('moment/locale/nl.js');
 
 
-type MyProps = { history: History };
 type MyState = {
     items: any,
     selected: any,
     cellHeight: 30,
     showEdit: boolean,
     showCreate: boolean,
+    showError: boolean,
+    error: number,
     locale: "nl",
     rowsPerHour: 2,
     numberOfDays: 5,
@@ -42,7 +44,7 @@ var colors = {
 
 var now = new Date();
 
-export default class Dashboard extends React.Component<MyProps, MyState> {
+export default class Dashboard extends React.Component<any, MyState> {
 
     constructor(props: any) {
 
@@ -53,7 +55,9 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
             cellHeight: 30,
             showEdit: false,
             showCreate: false,
+            showError: false,
             locale: "nl",
+            error: 0,
             rowsPerHour: 2,
             numberOfDays: 5,
             startDate: new Date(),
@@ -75,7 +79,6 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
 
 
     componentDidMount() {
-        console.dir(axios.defaults.headers.common);
 
         axios.defaults.headers.common = { 'Authorization': `bearer ${localStorage.getItem('token')}` }
 
@@ -86,11 +89,12 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
                     return null;
                 }
                 else {
+
                     for (var x = 0; data.length > x; x++) {
+                        //Runs by the data to check if any can be combined into one object
                         for (var y = x + 1; data.length > y; y++) {
                             if (data[x]['end_time'] == data[y]['start_time'] && data[x]['instructor'] == data[y]['instructor']) {
                                 data[x]['end_time'] = data[y]['end_time'];
-                                console.log(data);
                                 data.splice(y, 1);
                                 y--;
                                 //Because of the splice the next item is now at the spot of the current item on Y,
@@ -112,6 +116,19 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
                     this.setState({ 'items': items });
                     return data
                 }
+            }, (error) => {
+                console.error(error.message);
+                if (error.message == 'Network Error') {
+                    this.setState({ 'error': 404 });
+
+                }
+                else {
+                    console.error(error.response.status);
+                    this.setState({ 'error': error.response.status });
+                    this._openError();
+                    // alert(createError(error.response.status));
+                }
+
             })
     }
 
@@ -144,6 +161,24 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
     handleRangeSelection(item: any) {
         console.log('handleRangeSelection', item);
     }
+
+
+    _openError() {
+        this.setState({ 'showError': true })
+    }
+    _closeError(e: any) {
+        this.setState({ 'showError': false })
+    }
+    redirect(location: string) {
+        try {
+            this.props.history.push(location);
+        }
+        catch (e) {
+            console.log(e);
+        }
+
+    }
+
 
     render() {
 
@@ -235,6 +270,26 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
                             </Modal> : ''
 
                         }
+
+                        <IonAlert
+                            isOpen={this.state.showError}
+                            onDidDismiss={this._closeError}
+                            header={'Er is een probleem opgetreden'}
+                            message={createError(this.state.error)}
+                            buttons={[
+                                {
+                                    text: 'Okay',
+                                    handler: () => {
+                                        if (this.state.error) {
+                                            this.redirect('login');
+                                        }
+                                        else {
+
+                                        }
+                                    }
+                                }
+                            ]}
+                        />
                     </IonPage>
                 </IonSplitPane>
 
