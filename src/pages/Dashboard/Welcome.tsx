@@ -1,5 +1,5 @@
 import React from 'react';
-import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonMenuButton, IonButton, IonCol, IonRow, IonSplitPane, IonPage, IonText, IonLabel } from "@ionic/react";
+import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonMenuButton, IonButton, IonRow, IonSplitPane, IonPage } from "@ionic/react";
 import { Link } from 'react-router-dom';
 import '../../theme/styling.css';
 
