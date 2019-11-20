@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 // @ts-ignore
 import { ReactAgenda, guid, Modal } from 'react-agenda';
 import './AgendaStyle.css';
@@ -13,7 +13,6 @@ import ModifiedReactAgendaCtrl from '../../modifiedAgenda/modifiedReactAgendaCtr
 import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonMenuButton, IonButton, IonCol, IonRow, IonSplitPane, IonPage, IonFabButton, IonFab, IonIcon, IonModal } from "@ionic/react";
 import { Link } from 'react-router-dom';
 import '../../theme/styling.css';
-import { Icon } from 'ionicons/dist/types/icon/icon';
 import { add } from 'ionicons/icons';
 
 
@@ -88,6 +87,18 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
                 }
                 else {
                     for (var x = 0; data.length > x; x++) {
+                        for (var y = x + 1; data.length > y; y++) {
+                            if (data[x]['end_time'] == data[y]['start_time'] && data[x]['instructor'] == data[y]['instructor']) {
+                                data[x]['end_time'] = data[y]['end_time'];
+                                console.log(data);
+                                data.splice(y, 1);
+                                y--;
+                                //Because of the splice the next item is now at the spot of the current item on Y,
+                                // so to make sure it won't skip it needs to go back 1
+
+                            }
+                        }
+
                         var item = {
                             _id: guid(),
                             name: data[x].driving_instructor,
@@ -118,24 +129,15 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
 
 
     _openCreate() {
-        console.log("opening creeate!");
         this.setState({ 'showCreate': true })
     }
     _openEdit() {
         this.setState({ 'showEdit': true })
     }
     _closeEdit(e: any) {
-        // if (e) {
-        //     e.stopPropagation();
-        //     e.preventDefault();
-        // }
         this.setState({ 'showEdit': false })
     }
     _closeCreate(e: any) {
-        // if (e) {
-        //     e.stopPropagation();
-        //     e.preventDefault();
-        // }
         this.setState({ 'showCreate': false })
     }
 
@@ -211,6 +213,7 @@ export default class Dashboard extends React.Component<MyProps, MyState> {
                             <p>This is modal content</p>
                             <IonButton onClick={() => this._closeCreate}>Close Modal</IonButton>
                         </IonModal>
+
                         <IonFab vertical="bottom" horizontal="end" >
                             <IonButton onClick={() => this._openCreate()}>
                                 <IonIcon icon={add} />
