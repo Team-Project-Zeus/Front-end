@@ -86,13 +86,13 @@ export default class Login extends Component<any, MyState> {
         this.redirect('/home');
 
       }, (error) => {
-        console.dir(error.message);
+        console.error(error.message);
         if (error.message == 'Network Error') {
           this.setState({ 'errorMessage': createError(404) });
 
         }
         else {
-          console.log(error.response.status);
+          console.error(error.response.status);
           this.setState({ 'errorMessage': createError(error.response.status) });
         }
 

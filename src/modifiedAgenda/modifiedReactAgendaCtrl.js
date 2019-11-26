@@ -5,6 +5,7 @@ import moment from 'moment';
 import { guid, getUnique, getLast, getFirst } from 'react-agenda/src/helpers';
 import Rdate from 'react-datetime';
 import '../../node_modules/react-agenda/src/reactAgendaCtrl.css';
+import { IonButton } from '@ionic/react';
 
 var now = new Date();
 
@@ -237,6 +238,7 @@ export default class ModifiedReactAgendaCtrl extends Component {
 
             {/* <input type="submit" value="Save" /> */}
           </form>
+          {/* <IonButton>Delete Item</IonButton> */}
         </div>
       );
 

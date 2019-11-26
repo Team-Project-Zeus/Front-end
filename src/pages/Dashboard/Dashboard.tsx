@@ -10,10 +10,10 @@ import { environment } from '../../enviroment';
 import ModifiedReactAgendaItem from '../../modifiedAgenda/modifiedReactAgendaItem';
 import ModifiedReactAgendaCtrl from '../../modifiedAgenda/modifiedReactAgendaCtrl';
 
-import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonMenuButton, IonButton, IonCol, IonRow, IonSplitPane, IonPage, IonFabButton, IonFab, IonIcon, IonModal, IonAlert } from "@ionic/react";
+import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonMenuButton, IonButton, IonCol, IonRow, IonSplitPane, IonPage, IonFabButton, IonFab, IonIcon, IonModal, IonAlert, IonLabel, IonCheckbox } from "@ionic/react";
 import { Link } from 'react-router-dom';
 import '../../theme/styling.css';
-import { add } from 'ionicons/icons';
+import { add, list } from 'ionicons/icons';
 import { createError } from '../../utils/errorCodes';
 
 
@@ -41,6 +41,7 @@ var colors = {
     "color-2": "rgba(242, 177, 52, 1)",
     "color-3": "rgba(235, 85, 59, 1)"
 }
+var modalContent: any;
 
 var now = new Date();
 
@@ -145,7 +146,8 @@ export default class Dashboard extends React.Component<any, MyState> {
     }
 
 
-    _openCreate() {
+    async _openCreate() {
+        modalContent = await this.retrieveAvailable();
         this.setState({ 'showCreate': true })
     }
     _openEdit() {
@@ -167,7 +169,7 @@ export default class Dashboard extends React.Component<any, MyState> {
         this.setState({ 'showError': true })
     }
     _closeError(e: any) {
-        this.setState({ 'showError': false })
+        // this.setState({ 'showError': false })
     }
     redirect(location: string) {
         try {
@@ -180,11 +182,62 @@ export default class Dashboard extends React.Component<any, MyState> {
     }
 
 
+    async retrieveAvailable() {
+        //TODO change function to match backend
+        //TODO disable fab Button until results are loaded
+        var response;
+        axios.defaults.headers.common = { 'Authorization': `bearer ${localStorage.getItem('token')}` }
+        await axios.get(environment.APPOINTMENT_URL + "instructor/availability").then(response => response.data)
+            .then((data) => {
+                if (typeof data === 'string') {
+                    return null;
+                }
+                else {
+                    const listItems = data.map((data: any) => (
+                        <IonItem key={data.id} >
+                            <IonLabel>{data['start_time']} - {data['end_time']}</IonLabel>
+                            <IonCheckbox slot="end" value={data.id} />
+                        </IonItem >
+                    )
+                    );
+                    response = <IonList>{listItems}</IonList>;
+
+                }
+            }, (error) => {
+                console.error(error.message);
+                if (error.message == 'Network Error') {
+                    this.setState({ 'error': 404 });
+
+                }
+                else {
+                    console.error(error.response.status);
+                    this.setState({ 'error': error.response.status });
+                    this._openError();
+                }
+
+            })
+        return response;
+
+    }
+
+
     render() {
-
-
         return (
             <div>
+                <IonModal isOpen={this.state.showCreate}>
+                    <IonContent fullscreen >
+                        {modalContent}
+                    </IonContent>
+                    <IonFab vertical="bottom" horizontal="end" >
+                        <IonButton onClick={() => console.log('todo')}>afspraak aanvragen</IonButton>
+                        <IonButton onClick={() => this._closeCreate(this)}>sluiten</IonButton>
+                    </IonFab>
+                </IonModal>content
+            < IonFab vertical="bottom" horizontal="end" >
+                    <IonButton onClick={() => this._openCreate()}>
+                        <IonIcon icon={add} />
+                    </IonButton>
+                </IonFab >
                 <IonSplitPane contentId='content2'>
 
                     <IonMenu contentId='content2' type='push' >
@@ -244,10 +297,7 @@ export default class Dashboard extends React.Component<any, MyState> {
                             endAtTime={this.state.endAtTime}
 
                             onRangeSelection={this.handleRangeSelection.bind(this)} />
-                        <IonModal isOpen={this.state.showCreate}>
-                            <p>This is modal content</p>
-                            <IonButton onClick={() => this._closeCreate(this)}>Close Modal</IonButton>
-                        </IonModal>
+
 
                         <IonFab vertical="bottom" horizontal="end" >
                             <IonButton onClick={() => this._openCreate()}>

@@ -1,8 +1,23 @@
-export const environment = {
-    production: false,
-    environmentName: 'LOCAL',
-    API_KEY: 'YOUR_API_KEY',
-    API_URL: `http://77.162.207.35/api/`,
-    LOGIN_URL: 'http://77.162.207.35/api/login',
-    APPOINTMENT_URL: 'http://77.162.207.35/api/appointments/',
+class Env {
+    public production: Boolean = false;
+    public environmentName: String;
+    public baseUrl: string;
+
+    constructor() {
+        if (this.production) {
+            this.environmentName = 'PRODUCTION';
+            this.baseUrl = "http://77.162.207.35"
+        }
+        else {
+            this.environmentName = 'LOCAL';
+            this.baseUrl = "localhost"
+        }
+
+    }
+
+    API_URL: string = this.baseUrl + `/api/`;
+    LOGIN_URL: string = this.baseUrl + '/api/login';
+    APPOINTMENT_URL: string = this.baseUrl + '/api/appointments/';
 };
+
+export const environment = new Env;
