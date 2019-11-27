@@ -88,8 +88,13 @@ export default class Dashboard extends React.Component<any, MyState> {
 
 
     componentDidMount() {
+        const userRole = localStorage.getItem('role');
+        if (userRole == "instructor") {
+            ssdad
+        }
+        else {
 
-
+        }
         axios.get(environment.APPOINTMENT_URL + "/student").then(response => response.data)
             .then((data) => {
                 const items = [];
