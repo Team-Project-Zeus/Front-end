@@ -4,7 +4,7 @@ import axios from 'axios';
 import { environment } from '../../enviroment';
 import store from '../../store/store';
 import * as user from '../../store/user/actions';
-import { errorCodes } from '../../utils/errorCodes';
+import { createError } from '../../utils/errorCodes';
 
 // type MyProps = { errorMessage: string };
 type MyState = { email: string, password: string, errorMessage: string };
@@ -52,6 +52,7 @@ export default class Login extends Component<any, MyState> {
   handleEmailChange(event: any) {
     this.setState({ 'email': event.target.value });
   }
+
   //Updates Password property
   handlePasswordChange(event: any) {
     this.setState({ 'password': event.target.value });
@@ -70,7 +71,7 @@ export default class Login extends Component<any, MyState> {
       formBody.push(encodedKey + "=" + encodedValue);
     }
     const formBodyString = formBody.join("&");
-
+    console.log(environment.LOGIN_URL);
     await axios.post(environment.LOGIN_URL, formBodyString, this.config).then(response => response.data)
       .then((data) => {
         const token = data['token'];
@@ -78,40 +79,21 @@ export default class Login extends Component<any, MyState> {
         //Storing user Data in redux, this is needed to update the state of the protected routing
         store.dispatch(user.setEmail(email))
         store.dispatch(user.setToken(token))
-        store.dispatch(user.setName('test'))
+        // store.dispatch(user.setName('test'))
         //Saving token in localStorage to stay logged in 
         localStorage.setItem("token", token)
         //Redirecting to Dashboard
         this.redirect('/home');
 
       }, (error) => {
-        console.dir(error.message);
+        console.error(error.message);
         if (error.message == 'Network Error') {
-          this.setState({ 'errorMessage': errorCodes[404] });
+          this.setState({ 'errorMessage': createError(404) });
 
         }
         else {
-          console.log(error.response.status);
-
-          switch (error.response.status) {
-            case 422:
-              this.setState({ 'errorMessage': errorCodes[422] });
-              console.log(this.errorMessage);
-              break;
-            case 404:
-              this.setState({ 'errorMessage': errorCodes[404] });
-              console.log(this.errorMessage);
-              break;
-            case 429:
-              this.setState({ 'errorMessage': errorCodes[429] });
-              console.log(this.errorMessage);
-              break;
-            default:
-              this.setState({ 'errorMessage': "onbekende error!" });
-              console.log(this.errorMessage);
-              break;
-
-          }
+          console.error(error.response.status);
+          this.setState({ 'errorMessage': createError(error.response.status) });
         }
 
       })
