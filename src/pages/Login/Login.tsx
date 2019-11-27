@@ -71,7 +71,7 @@ export default class Login extends Component<any, MyState> {
       formBody.push(encodedKey + "=" + encodedValue);
     }
     const formBodyString = formBody.join("&");
-
+    console.log(environment.LOGIN_URL);
     await axios.post(environment.LOGIN_URL, formBodyString, this.config).then(response => response.data)
       .then((data) => {
         const token = data['token'];

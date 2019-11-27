@@ -27,6 +27,10 @@ type MyState = {
     showEdit: boolean,
     showCreate: boolean,
     showError: boolean,
+    showMessage: boolean,
+    messageTitle: string,
+    messageContent: string,
+
     error: number,
     locale: "nl",
     rowsPerHour: 2,
@@ -57,8 +61,11 @@ export default class Dashboard extends React.Component<any, MyState> {
             showEdit: false,
             showCreate: false,
             showError: false,
-            locale: "nl",
+            showMessage: false,
             error: 0,
+            messageTitle: "",
+            messageContent: "",
+            locale: "nl",
             rowsPerHour: 2,
             numberOfDays: 5,
             startDate: new Date(),
@@ -121,6 +128,7 @@ export default class Dashboard extends React.Component<any, MyState> {
                 console.error(error.message);
                 if (error.message == 'Network Error') {
                     this.setState({ 'error': 404 });
+                    this._openError();
 
                 }
                 else {
@@ -147,8 +155,11 @@ export default class Dashboard extends React.Component<any, MyState> {
 
 
     async _openCreate() {
+
         modalContent = await this.retrieveAvailable();
-        this.setState({ 'showCreate': true })
+        if (modalContent != null) {
+            this.setState({ 'showCreate': true });
+        }
     }
     _openEdit() {
         this.setState({ 'showEdit': true })
@@ -158,6 +169,13 @@ export default class Dashboard extends React.Component<any, MyState> {
     }
     _closeCreate(e: any) {
         this.setState({ 'showCreate': false })
+    }
+
+    _openMessage() {
+        this.setState({ 'showMessage': true })
+    }
+    _closeMessage(e: any) {
+        this.setState({ 'showMessage': false })
     }
 
     handleRangeSelection(item: any) {
@@ -187,26 +205,31 @@ export default class Dashboard extends React.Component<any, MyState> {
         //TODO disable fab Button until results are loaded
         var response;
         axios.defaults.headers.common = { 'Authorization': `bearer ${localStorage.getItem('token')}` }
-        await axios.get(environment.APPOINTMENT_URL + "instructor/availability").then(response => response.data)
+        await axios.get(environment.APPOINTMENT_URL + "availability").then(response => response.data)
             .then((data) => {
                 if (typeof data === 'string') {
+                    // this.setState({ 'error': "er zijn geen beschikbaren afspraken!" });
+                    // this._openError();
                     return null;
                 }
                 else {
                     const listItems = data.map((data: any) => (
                         <IonItem key={data.id} >
                             <IonLabel>{data['start_time']} - {data['end_time']}</IonLabel>
-                            <IonCheckbox slot="end" value={data.id} />
+                            <IonCheckbox slot="end" value={data.id} class="checkboxes" />
                         </IonItem >
                     )
                     );
                     response = <IonList>{listItems}</IonList>;
+
+
 
                 }
             }, (error) => {
                 console.error(error.message);
                 if (error.message == 'Network Error') {
                     this.setState({ 'error': 404 });
+                    this._openError();
 
                 }
                 else {
@@ -216,28 +239,61 @@ export default class Dashboard extends React.Component<any, MyState> {
                 }
 
             })
+
         return response;
 
     }
 
+    async reserve() {
+        var selected: Array<Number> = [];
+
+        for (var x = 0; x < document.getElementsByClassName("checkboxes").length; x++) {
+            var checkbox = document.getElementsByClassName('checkboxes')[x] as HTMLInputElement
+            if (checkbox.checked) {
+                selected.push(parseInt(checkbox.value));
+            }
+        }
+        console.dir(selected);
+
+        axios.defaults.headers.common = { 'Authorization': `bearer ${localStorage.getItem('token')}` }
+        await axios.patch(environment.APPOINTMENT_URL, selected).then(response => response.data)
+            .then((data) => {
+                console.dir(data);
+                this.setState({ 'messageTitle': "Succesvol toegevoegd" });
+                this._openMessage();
+                this.setState({ 'messageContent': "U heeft nu een paar afspraken met de gebruiker" });
+
+
+            }, (error) => {
+                console.error(error.message);
+                if (error.message == 'Network Error') {
+                    this.setState({ 'error': 404 });
+                    this._openError();
+
+                }
+                else {
+                    console.error(error.response.status);
+                    this.setState({ 'error': error.response.status });
+                    this._openError();
+
+                }
+
+            })
+
+    }
+
+    //TODO ADD patch request
 
     render() {
         return (
             <div>
-                <IonModal isOpen={this.state.showCreate}>
-                    <IonContent fullscreen >
-                        {modalContent}
-                    </IonContent>
-                    <IonFab vertical="bottom" horizontal="end" >
-                        <IonButton onClick={() => console.log('todo')}>afspraak aanvragen</IonButton>
-                        <IonButton onClick={() => this._closeCreate(this)}>sluiten</IonButton>
-                    </IonFab>
-                </IonModal>content
-            < IonFab vertical="bottom" horizontal="end" >
+
+                <IonFab vertical="bottom" horizontal="end" >
                     <IonButton onClick={() => this._openCreate()}>
                         <IonIcon icon={add} />
                     </IonButton>
                 </IonFab >
+
                 <IonSplitPane contentId='content2'>
 
                     <IonMenu contentId='content2' type='push' >
@@ -304,6 +360,23 @@ export default class Dashboard extends React.Component<any, MyState> {
                                 <IonIcon icon={add} />
                             </IonButton>
                         </IonFab>
+
+                        <IonModal isOpen={this.state.showCreate}>
+                            <IonContent fullscreen >
+
+                                {modalContent}
+
+                                <IonFab vertical="bottom" horizontal="end" >
+                                    {/* <input type="submit" value="Submit" /> */}
+                                    <IonButton onClick={() => this.reserve()}>afspraak aanvragen</IonButton>
+                                    <IonButton onClick={() => this._closeCreate(this)}>sluiten</IonButton>
+                                </IonFab>
+
+                            </IonContent>
+
+                        </IonModal>content
+
+
                         {
                             this.state.showEdit ? <Modal clickOutside={this._closeEdit} >
                                 <div className="modal-content">
@@ -312,14 +385,6 @@ export default class Dashboard extends React.Component<any, MyState> {
                             </Modal> : ''
 
                         }
-                        {/* {
-                            this.state.showCreate ? <Modal clickOutside={this._closeCreate} >
-                                <div className="modal-content">
-                                    <ModifiedReactAgendaCtrl items={this.state.items} itemColors={colors} selectedCells={this.state.selected} />
-                                </div>
-                            </Modal> : ''
-
-                        } */}
 
                         <IonAlert
                             isOpen={this.state.showError}
@@ -337,6 +402,20 @@ export default class Dashboard extends React.Component<any, MyState> {
 
                                         }
                                     }
+                                }
+                            ]}
+                        />
+
+                        <IonAlert
+                            isOpen={this.state.showMessage}
+                            onDidDismiss={this._closeMessage}
+                            header={this.state.messageTitle}
+                            message={this.state.messageContent}
+                            buttons={[
+                                {
+                                    text: 'Okay',
+                                    handler: () =>
+                                        this._closeMessage
                                 }
                             ]}
                         />

@@ -2,7 +2,9 @@ class Env {
     public production: Boolean = false;
     public environmentName: String;
     public baseUrl: string;
-
+    public API_URL: string;
+    public LOGIN_URL: string;
+    public APPOINTMENT_URL: string;
     constructor() {
         if (this.production) {
             this.environmentName = 'PRODUCTION';
@@ -10,14 +12,13 @@ class Env {
         }
         else {
             this.environmentName = 'LOCAL';
-            this.baseUrl = "localhost"
+            this.baseUrl = "http://localhost:8000"
         }
-
+        this.API_URL = this.baseUrl + `/api/`;
+        this.APPOINTMENT_URL = this.baseUrl + '/api/appointments/';
+        this.LOGIN_URL = this.baseUrl + '/api/login';
     }
 
-    API_URL: string = this.baseUrl + `/api/`;
-    LOGIN_URL: string = this.baseUrl + '/api/login';
-    APPOINTMENT_URL: string = this.baseUrl + '/api/appointments/';
 };
 
 export const environment = new Env;
