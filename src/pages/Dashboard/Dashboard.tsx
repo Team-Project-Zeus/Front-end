@@ -10,7 +10,7 @@ import { environment } from '../../enviroment';
 import ModifiedReactAgendaItem from '../../modifiedAgenda/modifiedReactAgendaItem';
 import ModifiedReactAgendaCtrl from '../../modifiedAgenda/modifiedReactAgendaCtrl';
 
-import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonMenuButton, IonButton, IonRow, IonSplitPane, IonPage, IonFabButton, IonFab, IonIcon, IonModal, IonAlert, IonLabel, IonCheckbox } from "@ionic/react";
+import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonMenuButton, IonButton, IonRow, IonSplitPane, IonPage, IonFab, IonIcon, IonModal, IonAlert, IonLabel, IonCheckbox } from "@ionic/react";
 import { Link } from 'react-router-dom';
 import '../../theme/styling.css';
 import { add, list } from 'ionicons/icons';
@@ -52,6 +52,7 @@ var now = new Date();
 export default class Dashboard extends React.Component<any, MyState> {
 
     constructor(props: any) {
+        axios.defaults.headers.common = { 'Authorization': `bearer ${localStorage.getItem('token')}` }
 
         super(props);
         this.state = {
@@ -88,7 +89,6 @@ export default class Dashboard extends React.Component<any, MyState> {
 
     componentDidMount() {
 
-        axios.defaults.headers.common = { 'Authorization': `bearer ${localStorage.getItem('token')}` }
 
         axios.get(environment.APPOINTMENT_URL + "/student").then(response => response.data)
             .then((data) => {
