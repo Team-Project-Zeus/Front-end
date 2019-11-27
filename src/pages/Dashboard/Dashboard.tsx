@@ -175,7 +175,7 @@ export default class Dashboard extends React.Component<any, MyState> {
         this.setState({ 'showMessage': true })
     }
     _closeMessage(e: any) {
-        this.setState({ 'showMessage': false })
+        // this.setState({ 'showMessage': false })
     }
 
     handleRangeSelection(item: any) {
