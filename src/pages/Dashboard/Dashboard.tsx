@@ -10,7 +10,7 @@ import { environment } from '../../enviroment';
 import ModifiedReactAgendaItem from '../../modifiedAgenda/modifiedReactAgendaItem';
 import ModifiedReactAgendaCtrl from '../../modifiedAgenda/modifiedReactAgendaCtrl';
 
-import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonMenuButton, IonButton, IonCol, IonRow, IonSplitPane, IonPage, IonFabButton, IonFab, IonIcon, IonModal, IonAlert, IonLabel, IonCheckbox } from "@ionic/react";
+import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonMenuButton, IonButton, IonRow, IonSplitPane, IonPage, IonFabButton, IonFab, IonIcon, IonModal, IonAlert, IonLabel, IonCheckbox } from "@ionic/react";
 import { Link } from 'react-router-dom';
 import '../../theme/styling.css';
 import { add, list } from 'ionicons/icons';
@@ -90,7 +90,7 @@ export default class Dashboard extends React.Component<any, MyState> {
 
         axios.defaults.headers.common = { 'Authorization': `bearer ${localStorage.getItem('token')}` }
 
-        axios.get(environment.APPOINTMENT_URL + "student").then(response => response.data)
+        axios.get(environment.APPOINTMENT_URL + "/student").then(response => response.data)
             .then((data) => {
                 const items = [];
                 if (typeof data === 'string') {
@@ -205,7 +205,7 @@ export default class Dashboard extends React.Component<any, MyState> {
         //TODO disable fab Button until results are loaded
         var response;
         axios.defaults.headers.common = { 'Authorization': `bearer ${localStorage.getItem('token')}` }
-        await axios.get(environment.APPOINTMENT_URL + "availability").then(response => response.data)
+        await axios.get(environment.APPOINTMENT_URL + "/availability").then(response => response.data)
             .then((data) => {
                 if (typeof data === 'string') {
                     // this.setState({ 'error': "er zijn geen beschikbaren afspraken!" });

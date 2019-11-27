@@ -15,7 +15,7 @@ class Env {
             this.baseUrl = "http://localhost:8000"
         }
         this.API_URL = this.baseUrl + `/api/`;
-        this.APPOINTMENT_URL = this.baseUrl + '/api/appointments/';
+        this.APPOINTMENT_URL = this.baseUrl + '/api/appointments';
         this.LOGIN_URL = this.baseUrl + '/api/login';
     }
 
