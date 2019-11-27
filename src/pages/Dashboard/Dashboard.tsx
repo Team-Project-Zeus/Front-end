@@ -108,35 +108,26 @@ export default class Dashboard extends React.Component<any, MyState> {
                         var oppositeRole = "student"
                     else
                         var oppositeRole = "driving_instructor"
-                    console.log(oppositeRole);
 
                     for (var x = 0; data.length > x; x++) {
                         //Runs by the data to check if any can be combined into one object
                         // console.dir(data[x]);
                         for (var y = x + 1; data.length > y; y++) {
-                            console.dir(data[y])
-                            if (data[x][oppositeRole]) {
-                                console.log(data[x][oppositeRole])
-
-                            }
-                            if (data[y][oppositeRole]) {
-                                console.log(data[y][oppositeRole])
-
-                            }
                             if (data[x]['end_time'] == data[y]['start_time'] && data[x][oppositeRole] == data[y][oppositeRole]) {
                                 data[x]['end_time'] = data[y]['end_time'];
                                 data.splice(y, 1);
                                 y--;
-                                console.log("true" + data[x]['end_time'] + " " + data[y]['start_time'] + " " + data[x][oppositeRole] + " " + data[y][oppositeRole] + " " + data[y]['id'] + data[x]['id'])
                                 //Because of the splice the next item is now at the spot of the current item on Y,
                                 // so to make sure it won't skip it needs to go back 1
 
                             }
                         }
 
+                        var name = data[x].user.name ? data[x].user.name : "vrij";
+
                         var item = {
                             _id: guid(),
-                            name: data[x].driving_instructor,
+                            name: name,
                             startDateTime: new Date(data[x]['start_time']),
                             endDateTime: new Date(data[x]['end_time']),
                             classes: 'color-2 color-3'
