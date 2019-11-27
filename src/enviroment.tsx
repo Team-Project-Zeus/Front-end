@@ -1,5 +1,5 @@
 class Env {
-    public production: Boolean = false;
+    public production: Boolean = true;
     public environmentName: String;
     public baseUrl: string;
     public API_URL: string;
