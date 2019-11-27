@@ -254,9 +254,12 @@ export default class Dashboard extends React.Component<any, MyState> {
             }
         }
         console.dir(selected);
+        var JSONresponse = {
+            "id": selected
+        }
 
         axios.defaults.headers.common = { 'Authorization': `bearer ${localStorage.getItem('token')}` }
-        await axios.patch(environment.APPOINTMENT_URL, selected).then(response => response.data)
+        await axios.patch(environment.APPOINTMENT_URL, JSONresponse).then(response => response.data)
             .then((data) => {
                 console.dir(data);
                 this.setState({ 'messageTitle': "Succesvol toegevoegd" });
