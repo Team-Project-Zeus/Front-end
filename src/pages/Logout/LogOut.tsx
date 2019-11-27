@@ -16,8 +16,17 @@ export default class LogOut extends React.Component {
     //Sends reset to store
     store.dispatch({
       type: 'RESET'
-    })
+    });
+    window.setTimeout(function () {
+      // Move to a new location or you can do something else
+      props.history.push('login');
+    }, 5000);
   }
+
+  compomentDidMount() {
+
+  }
+
 
 
 

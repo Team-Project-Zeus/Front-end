@@ -1,6 +1,6 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet, IonSplitPane, IonToolbar, IonTitle, IonPage, IonMenu, IonHeader, IonContent, IonList, IonItem } from '@ionic/react';
+import { IonApp, IonRouterOutlet, IonPage } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Login from './pages/Login/Login';
 
@@ -22,12 +22,14 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import './theme/styling.css';
+
 import Dashboard from './pages/Dashboard/Dashboard';
 import LogOut from './pages/Logout/LogOut';
 import { PrivateRoute } from './utils/routing';
 import { Provider } from 'react-redux';
 import store from './store/store';
-import { SideBar } from './utils/sideBar';
+
 import Welcome from './pages/Dashboard/Welcome';
 // 
 
@@ -59,7 +61,6 @@ const App: React.FunctionComponent = () => (
           </IonRouterOutlet>
         </IonPage>
       </IonReactRouter>
-      {/* </IonSplitPane> */}
     </IonApp>
   </Provider >
 );
