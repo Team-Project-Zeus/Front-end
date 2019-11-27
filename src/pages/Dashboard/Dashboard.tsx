@@ -89,27 +89,45 @@ export default class Dashboard extends React.Component<any, MyState> {
 
     componentDidMount() {
         const userRole = localStorage.getItem('role');
-        if (userRole == "instructor") {
-            ssdad
+        console.log(userRole);
+        if (userRole == "driving_instructor") {
+            var location = "/instructor";
         }
         else {
+            var location = "/student";
 
         }
-        axios.get(environment.APPOINTMENT_URL + "/student").then(response => response.data)
+        axios.get(environment.APPOINTMENT_URL + location).then(response => response.data)
             .then((data) => {
                 const items = [];
                 if (typeof data === 'string') {
                     return null;
                 }
                 else {
+                    if (localStorage.getItem('role') == "driving_instructor")
+                        var oppositeRole = "student"
+                    else
+                        var oppositeRole = "driving_instructor"
+                    console.log(oppositeRole);
 
                     for (var x = 0; data.length > x; x++) {
                         //Runs by the data to check if any can be combined into one object
+                        // console.dir(data[x]);
                         for (var y = x + 1; data.length > y; y++) {
-                            if (data[x]['end_time'] == data[y]['start_time'] && data[x]['instructor'] == data[y]['instructor']) {
+                            console.dir(data[y])
+                            if (data[x][oppositeRole]) {
+                                console.log(data[x][oppositeRole])
+
+                            }
+                            if (data[y][oppositeRole]) {
+                                console.log(data[y][oppositeRole])
+
+                            }
+                            if (data[x]['end_time'] == data[y]['start_time'] && data[x][oppositeRole] == data[y][oppositeRole]) {
                                 data[x]['end_time'] = data[y]['end_time'];
                                 data.splice(y, 1);
                                 y--;
+                                console.log("true" + data[x]['end_time'] + " " + data[y]['start_time'] + " " + data[x][oppositeRole] + " " + data[y][oppositeRole] + " " + data[y]['id'] + data[x]['id'])
                                 //Because of the splice the next item is now at the spot of the current item on Y,
                                 // so to make sure it won't skip it needs to go back 1
 
@@ -206,10 +224,7 @@ export default class Dashboard extends React.Component<any, MyState> {
 
 
     async retrieveAvailable() {
-        //TODO change function to match backend
-        //TODO disable fab Button until results are loaded
         var response;
-        axios.defaults.headers.common = { 'Authorization': `bearer ${localStorage.getItem('token')}` }
         await axios.get(environment.APPOINTMENT_URL + "/availability").then(response => response.data)
             .then((data) => {
                 if (typeof data === 'string') {
@@ -263,7 +278,6 @@ export default class Dashboard extends React.Component<any, MyState> {
             "id": selected
         }
 
-        axios.defaults.headers.common = { 'Authorization': `bearer ${localStorage.getItem('token')}` }
         await axios.patch(environment.APPOINTMENT_URL, JSONresponse).then(response => response.data)
             .then((data) => {
                 console.dir(data);

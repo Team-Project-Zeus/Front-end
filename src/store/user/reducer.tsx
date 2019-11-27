@@ -8,7 +8,7 @@ const defaultState: User = {
     password: null,
     email: null,
     name: null,
-    role: 'default',
+    role: localStorage.getItem('token'),
     isAuthenticated: false,
     token: localStorage.getItem('token')
 };

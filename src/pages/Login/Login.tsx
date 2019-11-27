@@ -79,10 +79,11 @@ export default class Login extends Component<any, MyState> {
         //Storing user Data in redux, this is needed to update the state of the protected routing
         store.dispatch(user.setEmail(email))
         store.dispatch(user.setToken(token))
-        store.dispatch(user.setRole(data['role']))
+        store.dispatch(user.setRole(data['user_role']))
         //Saving token in localStorage to stay logged in 
         localStorage.setItem("token", token)
-        localStorage.setItem("role", data['role'])
+        console.dir(data['user_role']);
+        localStorage.setItem("role", data['user_role'])
 
         //Redirecting to Dashboard
         this.redirect('/home');
