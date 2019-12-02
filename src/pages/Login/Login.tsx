@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton, IonList, IonItem, IonLabel } from '@ionic/react';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton, IonList, IonItem, IonLabel, IonText } from '@ionic/react';
 import React, { FormEvent, Component } from 'react';
 import axios from 'axios';
 import { environment } from '../../enviroment';
@@ -128,6 +128,12 @@ export default class Login extends Component<any, MyState> {
               <IonItem  ><p style={{ color: 'red' }}>{this.state.errorMessage}</p></IonItem>
             </IonList>
           </form>
+          {
+            environment.environmentName != "production" ? <IonToolbar color="danger">
+              <IonText color="warning">LOCAL Development</IonText>
+            </IonToolbar> : ''
+
+          }
         </IonContent>
       </>
     );
