@@ -2,6 +2,7 @@ import React from 'react';
 import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonMenuButton, IonButton, IonRow, IonSplitPane, IonPage } from "@ionic/react";
 import { Link } from 'react-router-dom';
 import '../../theme/styling.css';
+import { SideBar } from '../../utils/sideBar';
 
 
 export default class Welcome extends React.Component<any, any> {
@@ -11,13 +12,13 @@ export default class Welcome extends React.Component<any, any> {
             <IonSplitPane contentId='content2'>
 
                 <IonMenu contentId='content2' type='push' >
-                    <IonContent>
+                    {/* <IonContent>
                         <IonHeader>
                             <IonToolbar color="primary">
                                 <IonTitle>Menu</IonTitle>
                             </IonToolbar>
                         </IonHeader>
-                        <IonItem color="primary">Ingelogd als {localStorage.getItem('role')}</IonItem>
+                        <IonItem color="primary">Ingelogd als: {localStorage.getItem('role')}</IonItem>
                         <IonList>
                             <IonRow >
                                 <Link to="/home">
@@ -35,7 +36,8 @@ export default class Welcome extends React.Component<any, any> {
                         <Link id="logout" to="/logout">
                             <IonButton>logout</IonButton>
                         </Link>
-                    </IonRow>
+                    </IonRow> */}
+                    <SideBar />
                 </IonMenu>
 
                 <IonPage id='content2'>

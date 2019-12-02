@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { Key } from 'react';
 // @ts-ignore
 import { ReactAgenda, guid, Modal } from 'react-agenda';
 import './AgendaStyle.css';
@@ -11,10 +11,10 @@ import ModifiedReactAgendaItem from '../../modifiedAgenda/modifiedReactAgendaIte
 import ModifiedReactAgendaCtrl from '../../modifiedAgenda/modifiedReactAgendaCtrl';
 
 import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonMenuButton, IonButton, IonRow, IonSplitPane, IonPage, IonFab, IonIcon, IonModal, IonAlert, IonLabel, IonCheckbox } from "@ionic/react";
-import { Link } from 'react-router-dom';
 import '../../theme/styling.css';
 import { add, list } from 'ionicons/icons';
 import { createError } from '../../utils/errorCodes';
+import { SideBar } from '../../utils/sideBar';
 
 
 require('moment/locale/nl.js');
@@ -79,7 +79,6 @@ export default class Dashboard extends React.Component<any, MyState> {
 
         this.handleCellSelection = this.handleCellSelection.bind(this);
         this.handleItemEdit = this.handleItemEdit.bind(this);
-        this._openEdit = this._openEdit.bind(this)
         this._closeEdit = this._closeEdit.bind(this)
         this._closeCreate = this._closeCreate.bind(this)
 
@@ -142,13 +141,14 @@ export default class Dashboard extends React.Component<any, MyState> {
                 console.error(error.message);
                 if (error.message == 'Network Error') {
                     this.setState({ 'error': 404 });
-                    this._openError();
+                    this.open("showError");
+
 
                 }
                 else {
                     console.error(error.response.status);
                     this.setState({ 'error': error.response.status });
-                    this._openError();
+                    this.open("showError");
                     // alert(createError(error.response.status));
                 }
 
@@ -163,7 +163,7 @@ export default class Dashboard extends React.Component<any, MyState> {
         if (item && this.state.showEdit === false) {
             this.setState({ 'selected': [item] });
             this._closeEdit("test");
-            return this._openEdit();
+            return this.open("showEdit");
         }
     }
 
@@ -175,9 +175,6 @@ export default class Dashboard extends React.Component<any, MyState> {
             this.setState({ 'showCreate': true });
         }
     }
-    _openEdit() {
-        this.setState({ 'showEdit': true })
-    }
     _closeEdit(e: any) {
         this.setState({ 'showEdit': false })
     }
@@ -185,9 +182,24 @@ export default class Dashboard extends React.Component<any, MyState> {
         this.setState({ 'showCreate': false })
     }
 
-    _openMessage() {
-        this.setState({ 'showMessage': true })
+    open(item: string) {
+        // var key = 'showCreate';
+        switch (item) {
+            case 'showError':
+                this.setState({
+                    'showError': true
+                })
+                break;
+            case 'showEdit':
+                this.setState({ 'showEdit': true });
+                break;
+            default:
+                this.setState({ 'showMessage': true });
+                break;
+        }
     }
+
+
     _closeMessage(e: any) {
         // this.setState({ 'showMessage': false })
     }
@@ -197,9 +209,9 @@ export default class Dashboard extends React.Component<any, MyState> {
     }
 
 
-    _openError() {
-        this.setState({ 'showError': true })
-    }
+    // _openError() {
+    // this.setState({ 'showError': true })
+    // }
     _closeError(e: any) {
         // this.setState({ 'showError': false })
     }
@@ -240,13 +252,15 @@ export default class Dashboard extends React.Component<any, MyState> {
                 console.error(error.message);
                 if (error.message == 'Network Error') {
                     this.setState({ 'error': 404 });
-                    this._openError();
+                    this.open("showError");
+
 
                 }
                 else {
                     console.error(error.response.status);
                     this.setState({ 'error': error.response.status });
-                    this._openError();
+                    this.open("showError");
+
                 }
 
             })
@@ -273,7 +287,8 @@ export default class Dashboard extends React.Component<any, MyState> {
             .then((data) => {
                 console.dir(data);
                 this.setState({ 'messageTitle': "Succesvol toegevoegd" });
-                this._openMessage();
+                this.open("showMessage");
+
                 this.setState({ 'messageContent': "U heeft nu een paar afspraken met de gebruiker" });
 
 
@@ -281,13 +296,15 @@ export default class Dashboard extends React.Component<any, MyState> {
                 console.error(error.message);
                 if (error.message == 'Network Error') {
                     this.setState({ 'error': 404 });
-                    this._openError();
+                    this.open("showError");
+
 
                 }
                 else {
                     console.error(error.response.status);
                     this.setState({ 'error': error.response.status });
-                    this._openError();
+                    this.open("showError");
+
 
                 }
 
@@ -310,31 +327,7 @@ export default class Dashboard extends React.Component<any, MyState> {
                 <IonSplitPane contentId='content2'>
 
                     <IonMenu contentId='content2' type='push' >
-                        <IonContent>
-                            <IonHeader>
-                                <IonToolbar color="primary">
-                                    <IonTitle>Menu</IonTitle>
-                                </IonToolbar>
-                            </IonHeader>
-                            <IonItem color="primary">Ingelogd als {localStorage.getItem('role')}</IonItem>
-                            <IonList>
-                                <IonRow >
-                                    <Link to="/home">
-                                        <IonButton id="welcome">home</IonButton>
-                                    </Link>
-                                </IonRow>
-                                <IonRow>
-                                    <Link to="/dashboard">
-                                        <IonButton id="dashboard">dashboard</IonButton>
-                                    </Link>
-                                </IonRow>
-                            </IonList>
-                        </IonContent>
-                        <IonRow>
-                            <Link id="logout" to="/logout">
-                                <IonButton>logout</IonButton>
-                            </Link>
-                        </IonRow>
+                        <SideBar />
                     </IonMenu>
 
                     <IonPage id='content2'>
