@@ -316,6 +316,7 @@ export default class Dashboard extends React.Component<any, MyState> {
                                     <IonTitle>Menu</IonTitle>
                                 </IonToolbar>
                             </IonHeader>
+                            <IonItem color="primary">Ingelogd als {localStorage.getItem('role')}</IonItem>
                             <IonList>
                                 <IonRow >
                                     <Link to="/home">
