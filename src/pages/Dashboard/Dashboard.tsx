@@ -10,7 +10,7 @@ import { environment } from '../../enviroment';
 import ModifiedReactAgendaItem from '../../modifiedAgenda/modifiedReactAgendaItem';
 import ModifiedReactAgendaCtrl from '../../modifiedAgenda/modifiedReactAgendaCtrl';
 
-import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonMenuButton, IonButton, IonRow, IonSplitPane, IonPage, IonFab, IonIcon, IonModal, IonAlert, IonLabel, IonCheckbox } from "@ionic/react";
+import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonMenuButton, IonButton, IonRow, IonSplitPane, IonPage, IonFab, IonIcon, IonModal, IonAlert, IonLabel, IonCheckbox, IonPopover, IonFabList } from "@ionic/react";
 import '../../theme/styling.css';
 import { add, list } from 'ionicons/icons';
 import { createError } from '../../utils/errorCodes';
@@ -81,14 +81,12 @@ export default class Dashboard extends React.Component<any, MyState> {
         this.handleItemEdit = this.handleItemEdit.bind(this);
         this._closeEdit = this._closeEdit.bind(this)
         this._closeCreate = this._closeCreate.bind(this)
-
         this.handleRangeSelection = this.handleRangeSelection.bind(this);
     }
 
 
     componentDidMount() {
         const userRole = localStorage.getItem('role');
-        console.log(userRole);
         if (userRole == "driving_instructor") {
             var location = "/instructor";
         }
@@ -118,7 +116,6 @@ export default class Dashboard extends React.Component<any, MyState> {
                                 y--;
                                 //Because of the splice the next item is now at the spot of the current item on Y,
                                 // so to make sure it won't skip it needs to go back 1
-
                             }
                         }
 
@@ -142,14 +139,11 @@ export default class Dashboard extends React.Component<any, MyState> {
                 if (error.message == 'Network Error') {
                     this.setState({ 'error': 404 });
                     this.open("showError");
-
-
                 }
                 else {
                     console.error(error.response.status);
                     this.setState({ 'error': error.response.status });
                     this.open("showError");
-                    // alert(createError(error.response.status));
                 }
 
             })
@@ -167,20 +161,10 @@ export default class Dashboard extends React.Component<any, MyState> {
         }
     }
 
+    handleRangeSelection(item: any) {
+        console.log('handleRangeSelection', item);
+    }
 
-    async _openCreate() {
-
-        modalContent = await this.retrieveAvailable();
-        if (modalContent != null) {
-            this.setState({ 'showCreate': true });
-        }
-    }
-    _closeEdit(e: any) {
-        this.setState({ 'showEdit': false })
-    }
-    _closeCreate(e: any) {
-        this.setState({ 'showCreate': false })
-    }
 
     open(item: string) {
         // var key = 'showCreate';
@@ -199,22 +183,30 @@ export default class Dashboard extends React.Component<any, MyState> {
         }
     }
 
+    async _openCreate() {
 
+        modalContent = await this.retrieveAvailable();
+        if (modalContent != null) {
+            this.setState({ 'showCreate': true });
+        }
+    }
+
+    _closeEdit(e: any) {
+        this.setState({ 'showEdit': false })
+    }
+    _closeCreate(e: any) {
+        this.setState({ 'showCreate': false })
+    }
     _closeMessage(e: any) {
         // this.setState({ 'showMessage': false })
     }
-
-    handleRangeSelection(item: any) {
-        console.log('handleRangeSelection', item);
-    }
-
-
-    // _openError() {
-    // this.setState({ 'showError': true })
-    // }
     _closeError(e: any) {
         // this.setState({ 'showError': false })
     }
+
+
+
+
     redirect(location: string) {
         try {
             this.props.history.push(location);
@@ -278,41 +270,29 @@ export default class Dashboard extends React.Component<any, MyState> {
                 selected.push(parseInt(checkbox.value));
             }
         }
-        console.dir(selected);
+
         var JSONresponse = {
             "id": selected
         }
 
         await axios.patch(environment.APPOINTMENT_URL, JSONresponse).then(response => response.data)
             .then((data) => {
-                console.dir(data);
                 this.setState({ 'messageTitle': "Succesvol toegevoegd" });
                 this.open("showMessage");
-
                 this.setState({ 'messageContent': "U heeft nu een paar afspraken met de gebruiker" });
-
-
             }, (error) => {
                 console.error(error.message);
                 if (error.message == 'Network Error') {
                     this.setState({ 'error': 404 });
                     this.open("showError");
-
-
                 }
                 else {
                     console.error(error.response.status);
                     this.setState({ 'error': error.response.status });
                     this.open("showError");
-
-
                 }
-
             })
-
     }
-
-    //TODO ADD patch request
 
     render() {
         return (
@@ -368,22 +348,18 @@ export default class Dashboard extends React.Component<any, MyState> {
                             </IonButton>
                         </IonFab>
 
-                        <IonModal isOpen={this.state.showCreate}>
-                            <IonContent fullscreen >
 
-                                {modalContent}
-
-                                <IonFab vertical="bottom" horizontal="end" >
-                                    {/* <input type="submit" value="Submit" /> */}
-                                    <IonButton onClick={() => this.reserve()}>afspraak aanvragen</IonButton>
-                                    <IonButton onClick={() => this._closeCreate(this)}>sluiten</IonButton>
-                                </IonFab>
-
+                        <IonPopover isOpen={this.state.showCreate} id="popOver">
+                            <IonContent id="popOver">
+                                <IonList class="modalList">
+                                    {modalContent}
+                                </IonList>
                             </IonContent>
-
-                        </IonModal>content
-
-
+                            <IonRow >
+                                <IonButton onClick={() => this.reserve()}>afspraak aanvragen</IonButton>
+                                <IonButton onClick={() => this._closeCreate(this)}>sluiten</IonButton>
+                            </IonRow>
+                        </IonPopover>
                         {
                             this.state.showEdit ? <Modal clickOutside={this._closeEdit} >
                                 <div className="modal-content">
