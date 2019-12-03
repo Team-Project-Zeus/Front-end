@@ -20,5 +20,13 @@ ion-menu > * > * > * > * > ion-button
 #logout > ion-button {
     /* width: 100%; */
     display:block;
+}
+.modalList{
+      max-height: 350px;
+      overflow-y: scroll;
     
+}
+
+#popOver .popover-content{
+    width: auto !important;
 }
