@@ -128,8 +128,9 @@ export default class Login extends Component<any, MyState> {
               <IonItem  ><p style={{ color: 'red' }}>{this.state.errorMessage}</p></IonItem>
             </IonList>
           </form>
+          {console.log(environment.environmentName)}
           {
-            environment.environmentName != "production" ? <IonToolbar color="danger">
+            environment.environmentName != "PRODUCTION" ? <IonToolbar color="danger">
               <IonText color="warning">LOCAL Development</IonText>
             </IonToolbar> : ''
 
