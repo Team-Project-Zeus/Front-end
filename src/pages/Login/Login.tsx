@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton, IonList, IonItem, IonLabel } from '@ionic/react';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton, IonList, IonItem, IonLabel, IonText } from '@ionic/react';
 import React, { FormEvent, Component } from 'react';
 import axios from 'axios';
 import { environment } from '../../enviroment';
@@ -71,7 +71,7 @@ export default class Login extends Component<any, MyState> {
       formBody.push(encodedKey + "=" + encodedValue);
     }
     const formBodyString = formBody.join("&");
-    console.log(environment.LOGIN_URL);
+
     await axios.post(environment.LOGIN_URL, formBodyString, this.config).then(response => response.data)
       .then((data) => {
         const token = data['token'];
@@ -79,9 +79,12 @@ export default class Login extends Component<any, MyState> {
         //Storing user Data in redux, this is needed to update the state of the protected routing
         store.dispatch(user.setEmail(email))
         store.dispatch(user.setToken(token))
-        // store.dispatch(user.setName('test'))
+        store.dispatch(user.setRole(data['user_role']))
         //Saving token in localStorage to stay logged in 
         localStorage.setItem("token", token)
+        console.dir(data['user_role']);
+        localStorage.setItem("role", data['user_role'])
+
         //Redirecting to Dashboard
         this.redirect('/home');
 
@@ -125,6 +128,12 @@ export default class Login extends Component<any, MyState> {
               <IonItem  ><p style={{ color: 'red' }}>{this.state.errorMessage}</p></IonItem>
             </IonList>
           </form>
+          {
+            environment.environmentName != "production" ? <IonToolbar color="danger">
+              <IonText color="warning">LOCAL Development</IonText>
+            </IonToolbar> : ''
+
+          }
         </IonContent>
       </>
     );

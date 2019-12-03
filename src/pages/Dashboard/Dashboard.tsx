@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { Key } from 'react';
 // @ts-ignore
 import { ReactAgenda, guid, Modal } from 'react-agenda';
 import './AgendaStyle.css';
@@ -10,11 +10,11 @@ import { environment } from '../../enviroment';
 import ModifiedReactAgendaItem from '../../modifiedAgenda/modifiedReactAgendaItem';
 import ModifiedReactAgendaCtrl from '../../modifiedAgenda/modifiedReactAgendaCtrl';
 
-import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonMenuButton, IonButton, IonRow, IonSplitPane, IonPage, IonFabButton, IonFab, IonIcon, IonModal, IonAlert, IonLabel, IonCheckbox } from "@ionic/react";
-import { Link } from 'react-router-dom';
+import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonMenuButton, IonButton, IonRow, IonSplitPane, IonPage, IonFab, IonIcon, IonModal, IonAlert, IonLabel, IonCheckbox, IonPopover, IonFabList } from "@ionic/react";
 import '../../theme/styling.css';
 import { add, list } from 'ionicons/icons';
 import { createError } from '../../utils/errorCodes';
+import { SideBar } from '../../utils/sideBar';
 
 
 require('moment/locale/nl.js');
@@ -52,6 +52,7 @@ var now = new Date();
 export default class Dashboard extends React.Component<any, MyState> {
 
     constructor(props: any) {
+        axios.defaults.headers.common = { 'Authorization': `bearer ${localStorage.getItem('token')}` }
 
         super(props);
         this.state = {
@@ -78,42 +79,51 @@ export default class Dashboard extends React.Component<any, MyState> {
 
         this.handleCellSelection = this.handleCellSelection.bind(this);
         this.handleItemEdit = this.handleItemEdit.bind(this);
-        this._openEdit = this._openEdit.bind(this)
         this._closeEdit = this._closeEdit.bind(this)
         this._closeCreate = this._closeCreate.bind(this)
-
         this.handleRangeSelection = this.handleRangeSelection.bind(this);
     }
 
 
     componentDidMount() {
+        const userRole = localStorage.getItem('role');
+        if (userRole == "driving_instructor") {
+            var location = "/instructor";
+        }
+        else {
+            var location = "/student";
 
-        axios.defaults.headers.common = { 'Authorization': `bearer ${localStorage.getItem('token')}` }
-
-        axios.get(environment.APPOINTMENT_URL + "/student").then(response => response.data)
+        }
+        axios.get(environment.APPOINTMENT_URL + location).then(response => response.data)
             .then((data) => {
                 const items = [];
                 if (typeof data === 'string') {
                     return null;
                 }
                 else {
+                    if (localStorage.getItem('role') == "driving_instructor")
+                        var oppositeRole = "student"
+                    else
+                        var oppositeRole = "driving_instructor"
 
                     for (var x = 0; data.length > x; x++) {
                         //Runs by the data to check if any can be combined into one object
+                        // console.dir(data[x]);
                         for (var y = x + 1; data.length > y; y++) {
-                            if (data[x]['end_time'] == data[y]['start_time'] && data[x]['instructor'] == data[y]['instructor']) {
+                            if (data[x]['end_time'] == data[y]['start_time'] && data[x][oppositeRole] == data[y][oppositeRole]) {
                                 data[x]['end_time'] = data[y]['end_time'];
                                 data.splice(y, 1);
                                 y--;
                                 //Because of the splice the next item is now at the spot of the current item on Y,
                                 // so to make sure it won't skip it needs to go back 1
-
                             }
                         }
 
+                        var name = data[x].user.name ? data[x].user.name : "vrij";
+
                         var item = {
                             _id: guid(),
-                            name: data[x].driving_instructor,
+                            name: name,
                             startDateTime: new Date(data[x]['start_time']),
                             endDateTime: new Date(data[x]['end_time']),
                             classes: 'color-2 color-3'
@@ -128,14 +138,12 @@ export default class Dashboard extends React.Component<any, MyState> {
                 console.error(error.message);
                 if (error.message == 'Network Error') {
                     this.setState({ 'error': 404 });
-                    this._openError();
-
+                    this.open("showError");
                 }
                 else {
                     console.error(error.response.status);
                     this.setState({ 'error': error.response.status });
-                    this._openError();
-                    // alert(createError(error.response.status));
+                    this.open("showError");
                 }
 
             })
@@ -149,10 +157,31 @@ export default class Dashboard extends React.Component<any, MyState> {
         if (item && this.state.showEdit === false) {
             this.setState({ 'selected': [item] });
             this._closeEdit("test");
-            return this._openEdit();
+            return this.open("showEdit");
         }
     }
 
+    handleRangeSelection(item: any) {
+        console.log('handleRangeSelection', item);
+    }
+
+
+    open(item: string) {
+        // var key = 'showCreate';
+        switch (item) {
+            case 'showError':
+                this.setState({
+                    'showError': true
+                })
+                break;
+            case 'showEdit':
+                this.setState({ 'showEdit': true });
+                break;
+            default:
+                this.setState({ 'showMessage': true });
+                break;
+        }
+    }
 
     async _openCreate() {
 
@@ -161,34 +190,23 @@ export default class Dashboard extends React.Component<any, MyState> {
             this.setState({ 'showCreate': true });
         }
     }
-    _openEdit() {
-        this.setState({ 'showEdit': true })
-    }
+
     _closeEdit(e: any) {
         this.setState({ 'showEdit': false })
     }
     _closeCreate(e: any) {
         this.setState({ 'showCreate': false })
     }
-
-    _openMessage() {
-        this.setState({ 'showMessage': true })
-    }
     _closeMessage(e: any) {
         // this.setState({ 'showMessage': false })
-    }
-
-    handleRangeSelection(item: any) {
-        console.log('handleRangeSelection', item);
-    }
-
-
-    _openError() {
-        this.setState({ 'showError': true })
     }
     _closeError(e: any) {
         // this.setState({ 'showError': false })
     }
+
+
+
+
     redirect(location: string) {
         try {
             this.props.history.push(location);
@@ -201,10 +219,7 @@ export default class Dashboard extends React.Component<any, MyState> {
 
 
     async retrieveAvailable() {
-        //TODO change function to match backend
-        //TODO disable fab Button until results are loaded
         var response;
-        axios.defaults.headers.common = { 'Authorization': `bearer ${localStorage.getItem('token')}` }
         await axios.get(environment.APPOINTMENT_URL + "/availability").then(response => response.data)
             .then((data) => {
                 if (typeof data === 'string') {
@@ -229,13 +244,15 @@ export default class Dashboard extends React.Component<any, MyState> {
                 console.error(error.message);
                 if (error.message == 'Network Error') {
                     this.setState({ 'error': 404 });
-                    this._openError();
+                    this.open("showError");
+
 
                 }
                 else {
                     console.error(error.response.status);
                     this.setState({ 'error': error.response.status });
-                    this._openError();
+                    this.open("showError");
+
                 }
 
             })
@@ -253,39 +270,29 @@ export default class Dashboard extends React.Component<any, MyState> {
                 selected.push(parseInt(checkbox.value));
             }
         }
-        console.dir(selected);
+
         var JSONresponse = {
             "id": selected
         }
 
-        axios.defaults.headers.common = { 'Authorization': `bearer ${localStorage.getItem('token')}` }
         await axios.patch(environment.APPOINTMENT_URL, JSONresponse).then(response => response.data)
             .then((data) => {
-                console.dir(data);
                 this.setState({ 'messageTitle': "Succesvol toegevoegd" });
-                this._openMessage();
+                this.open("showMessage");
                 this.setState({ 'messageContent': "U heeft nu een paar afspraken met de gebruiker" });
-
-
             }, (error) => {
                 console.error(error.message);
                 if (error.message == 'Network Error') {
                     this.setState({ 'error': 404 });
-                    this._openError();
-
+                    this.open("showError");
                 }
                 else {
                     console.error(error.response.status);
                     this.setState({ 'error': error.response.status });
-                    this._openError();
-
+                    this.open("showError");
                 }
-
             })
-
     }
-
-    //TODO ADD patch request
 
     render() {
         return (
@@ -300,30 +307,7 @@ export default class Dashboard extends React.Component<any, MyState> {
                 <IonSplitPane contentId='content2'>
 
                     <IonMenu contentId='content2' type='push' >
-                        <IonContent>
-                            <IonHeader>
-                                <IonToolbar color="primary">
-                                    <IonTitle>Menu</IonTitle>
-                                </IonToolbar>
-                            </IonHeader>
-                            <IonList>
-                                <IonRow >
-                                    <Link to="/home">
-                                        <IonButton id="welcome">home</IonButton>
-                                    </Link>
-                                </IonRow>
-                                <IonRow>
-                                    <Link to="/dashboard">
-                                        <IonButton id="dashboard">dashboard</IonButton>
-                                    </Link>
-                                </IonRow>
-                            </IonList>
-                        </IonContent>
-                        <IonRow>
-                            <Link id="logout" to="/logout">
-                                <IonButton>logout</IonButton>
-                            </Link>
-                        </IonRow>
+                        <SideBar />
                     </IonMenu>
 
                     <IonPage id='content2'>
@@ -364,22 +348,18 @@ export default class Dashboard extends React.Component<any, MyState> {
                             </IonButton>
                         </IonFab>
 
-                        <IonModal isOpen={this.state.showCreate}>
-                            <IonContent fullscreen >
 
-                                {modalContent}
-
-                                <IonFab vertical="bottom" horizontal="end" >
-                                    {/* <input type="submit" value="Submit" /> */}
-                                    <IonButton onClick={() => this.reserve()}>afspraak aanvragen</IonButton>
-                                    <IonButton onClick={() => this._closeCreate(this)}>sluiten</IonButton>
-                                </IonFab>
-
+                        <IonPopover isOpen={this.state.showCreate} id="popOver">
+                            <IonContent id="popOver">
+                                <IonList class="modalList">
+                                    {modalContent}
+                                </IonList>
                             </IonContent>
-
-                        </IonModal>content
-
-
+                            <IonRow >
+                                <IonButton onClick={() => this.reserve()}>afspraak aanvragen</IonButton>
+                                <IonButton onClick={() => this._closeCreate(this)}>sluiten</IonButton>
+                            </IonRow>
+                        </IonPopover>
                         {
                             this.state.showEdit ? <Modal clickOutside={this._closeEdit} >
                                 <div className="modal-content">

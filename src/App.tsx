@@ -30,7 +30,7 @@ import { PrivateRoute } from './utils/routing';
 import { Provider } from 'react-redux';
 import store from './store/store';
 
-import Welcome from './pages/Dashboard/Welcome';
+import Welcome from './pages/Welcome/Welcome';
 // 
 
 window.onload = function () {
