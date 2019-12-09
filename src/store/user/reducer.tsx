@@ -8,9 +8,9 @@ const defaultState: User = {
     password: null,
     email: null,
     name: null,
-    role: 'default',
+    role: localStorage.getItem('token') || null,
     isAuthenticated: false,
-    token: localStorage.getItem('token')
+    token: localStorage.getItem('token') || null
 };
 
 export type UserAction = ActionType<typeof users>;

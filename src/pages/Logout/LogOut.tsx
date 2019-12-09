@@ -1,7 +1,7 @@
-import { IonHeader, IonToolbar, IonTitle, IonText, IonContent } from "@ionic/react";
+import { IonHeader, IonToolbar, IonTitle, IonText, IonContent, IonRow } from "@ionic/react";
 import React from 'react';
 import store from "../../store/store";
-import { Redirect } from "react-router";
+import axios from "axios";
 
 
 
@@ -18,21 +18,13 @@ export default class LogOut extends React.Component {
     store.dispatch({
       type: 'RESET'
     });
+    axios.defaults.headers.common = {};
+
     window.setTimeout(function () {
       // Move to a new location or you can do something else
       props.history.push('login');
-    }, 5000);
+    }, 3000);
   }
-
-  compomentDidMount() {
-
-  }
-
-
-
-
-
-
 
   render() {
     return (
@@ -43,7 +35,9 @@ export default class LogOut extends React.Component {
           </IonToolbar>
         </IonHeader>
         <IonContent>
-          <IonText>Logged out!</IonText>
+          <IonRow>
+            <IonTitle>Logged out!</IonTitle>
+          </IonRow>
         </IonContent>
       </>
     );

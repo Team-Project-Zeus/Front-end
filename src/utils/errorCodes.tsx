@@ -21,6 +21,8 @@ export var createError = function (errorCode: number) {
             return (errorCodes[500]);
         case 429:
             return (errorCodes[429]);
+        case 500:
+            return (errorCodes[500]);
         default:
             return "onbekende error!";
 

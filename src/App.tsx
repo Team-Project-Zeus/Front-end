@@ -1,6 +1,6 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet, IonSplitPane, IonToolbar, IonTitle, IonPage, IonMenu, IonHeader, IonContent, IonList, IonItem } from '@ionic/react';
+import { IonApp, IonRouterOutlet, IonPage } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Login from './pages/Login/Login';
 
@@ -30,7 +30,7 @@ import { PrivateRoute } from './utils/routing';
 import { Provider } from 'react-redux';
 import store from './store/store';
 
-import Welcome from './pages/Dashboard/Welcome';
+import Welcome from './pages/Welcome/Welcome';
 // 
 
 window.onload = function () {

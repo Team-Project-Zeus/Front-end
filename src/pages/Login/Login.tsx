@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton, IonList, IonItem, IonLabel } from '@ionic/react';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton, IonList, IonItem, IonLabel, IonText } from '@ionic/react';
 import React, { FormEvent, Component } from 'react';
 import axios from 'axios';
 import { environment } from '../../enviroment';
@@ -59,7 +59,6 @@ export default class Login extends Component<any, MyState> {
   }
 
   async login(email: string, password: string) {
-
     const object: any = { 'email': email, 'password': password };
 
 
@@ -71,28 +70,33 @@ export default class Login extends Component<any, MyState> {
       formBody.push(encodedKey + "=" + encodedValue);
     }
     const formBodyString = formBody.join("&");
-
+    axios.post(environment.LOGIN_URL, formBodyString);
     await axios.post(environment.LOGIN_URL, formBodyString, this.config).then(response => response.data)
       .then((data) => {
         const token = data['token'];
+        axios.defaults.headers.common = { 'Authorization': `bearer ${localStorage.getItem('token')}` }
 
         //Storing user Data in redux, this is needed to update the state of the protected routing
         store.dispatch(user.setEmail(email))
         store.dispatch(user.setToken(token))
-        // store.dispatch(user.setName('test'))
+        console.dir(console.dir(data));
+        store.dispatch(user.setRole(data['user_role']))
         //Saving token in localStorage to stay logged in 
         localStorage.setItem("token", token)
+        console.dir(data['user_role']);
+        localStorage.setItem("role", data['user_role'])
+
         //Redirecting to Dashboard
         this.redirect('/home');
 
       }, (error) => {
-        console.dir(error.message);
+        console.error(error.message);
         if (error.message == 'Network Error') {
           this.setState({ 'errorMessage': createError(404) });
 
         }
         else {
-          console.log(error.response.status);
+          console.error(error.response.status);
           this.setState({ 'errorMessage': createError(error.response.status) });
         }
 
@@ -125,6 +129,13 @@ export default class Login extends Component<any, MyState> {
               <IonItem  ><p style={{ color: 'red' }}>{this.state.errorMessage}</p></IonItem>
             </IonList>
           </form>
+          {console.log(environment.environmentName)}
+          {
+            environment.environmentName != "PRODUCTION" ? <IonToolbar color="danger">
+              <IonText color="warning">LOCAL Development</IonText>
+            </IonToolbar> : ''
+
+          }
         </IonContent>
       </>
     );
