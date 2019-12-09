@@ -74,7 +74,6 @@ export default class Dashboard extends React.Component<any, MyState> {
             startAtTime: 6,
             endAtTime: 23,
         };
-        console.dir(localStorage.getItem('role'));
         this.setState({ 'startDate': now });
 
 
@@ -300,13 +299,6 @@ export default class Dashboard extends React.Component<any, MyState> {
     render() {
         return (
             <div>
-
-                <IonFab vertical="bottom" horizontal="end" >
-                    <IonButton onClick={() => this._openCreate()}>
-                        <IonIcon icon={add} />
-                    </IonButton>
-                </IonFab >
-
                 <IonSplitPane contentId='content2'>
 
                     <IonMenu contentId='content2' type='push' >
@@ -343,14 +335,14 @@ export default class Dashboard extends React.Component<any, MyState> {
                             endAtTime={this.state.endAtTime}
 
                             onRangeSelection={this.handleRangeSelection.bind(this)} />
-
-
-                        <IonFab vertical="bottom" horizontal="end" >
-                            <IonButton onClick={() => this._openCreate()}>
-                                <IonIcon icon={add} />
-                            </IonButton>
-                        </IonFab>
-
+                        {
+                            localStorage.getItem('role') == 'student' ?
+                                <IonFab vertical="bottom" horizontal="end" >
+                                    <IonButton onClick={() => this._openCreate()}>
+                                        <IonIcon icon={add} />
+                                    </IonButton>
+                                </IonFab> : ""
+                        }
 
                         <IonPopover isOpen={this.state.showCreate} id="popOver">
                             <IonContent id="popOver">
