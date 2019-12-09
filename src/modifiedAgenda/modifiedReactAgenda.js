@@ -4,8 +4,8 @@ import moment from 'moment'
 import ModifiedReactAgendaItem from './modifiedReactAgendaItem';
 import classNames from 'classnames';
 import { guid, getUnique, getLast, getFirst, mapItems } from '../../node_modules/react-agenda/src/helpers.js';
-import * as DragDropHelper from '../../node_modules/react-agenda/src/dragAndDropHelper.js';
-
+// import * as DragDropHelper from './dragAndDropHelper.js';
+const ReactAgendaItem = ModifiedReactAgendaItem
 var startSelect
 var endSelect
 var isDragging = false;
@@ -671,13 +671,13 @@ export default class ReactAgenda extends Component {
       }
     };
 
-
+    var itmName
 
     var Colors = this.props.itemColors
 
     var ItemComponent = this.props.itemComponent
       ? this.props.itemComponent
-      : ModifiedReactAgendaItem;
+      : ReactAgendaItem;
 
     var renderItemCells = function (cell, i) {
 
@@ -930,7 +930,7 @@ ReactAgenda.defaultProps = {
   helper: true,
   items: [],
   autoScale: false,
-  itemComponent: ModifiedReactAgendaItem,
+  itemComponent: ReactAgendaItem,
   numberOfDays: 4,
   headFormat: "ddd DD MMM",
   rowsPerHour: 4,

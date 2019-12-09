@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 // import { getLast, getFirst } from './helpers.js';
 // import './reactAgendaItem.css';
 
-
+//THIS IS THE ELEMENT THAT DISPLAYS ON THE AGENDA ITSELF
 export default class ModifiedReactAgendaItem extends Component {
   constructor(props) {
     super(props);

@@ -137,7 +137,7 @@ export default class Dashboard extends React.Component<any, MyState> {
                             name: name,
                             startDateTime: new Date(data[x]['start_time']),
                             endDateTime: new Date(data[x]['end_time']),
-                            description: data[x].description,
+                            description: 'test',
                             classes: color
                         }
 

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { guid, getUnique, getLast, getFirst } from 'react-agenda/src/helpers';
 import Rdate from 'react-datetime';
-import '../../node_modules/react-agenda/src/reactAgendaCtrl.css';
+// import '../../node_modules/react-agenda/src/reactAgendaCtrl.css';
 import { IonButton } from '@ionic/react';
 
 var now = new Date();
@@ -218,9 +218,9 @@ export default class ModifiedReactAgendaCtrl extends Component {
     const divStyle = {};
 
     if (this.state.editMode) {
-
+      console.dir(this.state);
       var select = this.props.selectedCells[0];
-
+      //THIS IS THE DETAILS MODAL
       return (
         <div className="agendCtrls-wrapper" style={divStyle}>
           <form onSubmit={this.handleEdit}>
