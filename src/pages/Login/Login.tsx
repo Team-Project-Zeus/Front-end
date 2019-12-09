@@ -59,7 +59,6 @@ export default class Login extends Component<any, MyState> {
   }
 
   async login(email: string, password: string) {
-
     const object: any = { 'email': email, 'password': password };
 
 
@@ -71,14 +70,16 @@ export default class Login extends Component<any, MyState> {
       formBody.push(encodedKey + "=" + encodedValue);
     }
     const formBodyString = formBody.join("&");
-
+    axios.post(environment.LOGIN_URL, formBodyString);
     await axios.post(environment.LOGIN_URL, formBodyString, this.config).then(response => response.data)
       .then((data) => {
         const token = data['token'];
+        axios.defaults.headers.common = { 'Authorization': `bearer ${localStorage.getItem('token')}` }
 
         //Storing user Data in redux, this is needed to update the state of the protected routing
         store.dispatch(user.setEmail(email))
         store.dispatch(user.setToken(token))
+        console.dir(console.dir(data));
         store.dispatch(user.setRole(data['user_role']))
         //Saving token in localStorage to stay logged in 
         localStorage.setItem("token", token)

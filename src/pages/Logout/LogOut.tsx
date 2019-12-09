@@ -1,6 +1,7 @@
 import { IonHeader, IonToolbar, IonTitle, IonText, IonContent, IonRow } from "@ionic/react";
 import React from 'react';
 import store from "../../store/store";
+import axios from "axios";
 
 
 
@@ -17,6 +18,8 @@ export default class LogOut extends React.Component {
     store.dispatch({
       type: 'RESET'
     });
+    axios.defaults.headers.common = {};
+
     window.setTimeout(function () {
       // Move to a new location or you can do something else
       props.history.push('login');

@@ -6,6 +6,7 @@ import { SideBar } from '../../utils/sideBar';
 import axios from 'axios';
 import { environment } from '../../enviroment';
 import { createError } from '../../utils/errorCodes';
+import store from '../../store/store';
 
 type MyState = {
     showError: boolean,
@@ -166,6 +167,12 @@ export default class Welcome extends React.Component<any, MyState> {
                             handler: () => {
                                 if (this.state.error) {
                                     this.redirect('login');
+                                    axios.defaults.headers.common = {};
+                                    localStorage.clear();
+                                    //Sends reset to store
+                                    store.dispatch({
+                                        type: 'RESET'
+                                    });
                                 }
                                 else {
 

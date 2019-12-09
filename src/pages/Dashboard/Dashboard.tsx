@@ -15,6 +15,7 @@ import '../../theme/styling.css';
 import { add, list } from 'ionicons/icons';
 import { createError } from '../../utils/errorCodes';
 import { SideBar } from '../../utils/sideBar';
+import store from '../../store/store';
 
 
 require('moment/locale/nl.js');
@@ -73,7 +74,7 @@ export default class Dashboard extends React.Component<any, MyState> {
             startAtTime: 6,
             endAtTime: 23,
         };
-
+        console.dir(localStorage.getItem('role'));
         this.setState({ 'startDate': now });
 
 
@@ -112,6 +113,8 @@ export default class Dashboard extends React.Component<any, MyState> {
                         for (var y = x + 1; data.length > y; y++) {
                             if (data[x]['end_time'] == data[y]['start_time'] && data[x][oppositeRole] == data[y][oppositeRole]) {
                                 data[x]['end_time'] = data[y]['end_time'];
+                                if (data[x].user)
+                                    console.log(data[x].user.name)
                                 data.splice(y, 1);
                                 y--;
                                 //Because of the splice the next item is now at the spot of the current item on Y,
@@ -379,7 +382,13 @@ export default class Dashboard extends React.Component<any, MyState> {
                                     text: 'Okay',
                                     handler: () => {
                                         if (this.state.error) {
+                                            localStorage.clear();
+                                            //Sends reset to store
+                                            store.dispatch({
+                                                type: 'RESET'
+                                            });
                                             this.redirect('login');
+                                            axios.defaults.headers.common = {};
                                         }
                                         else {
 
