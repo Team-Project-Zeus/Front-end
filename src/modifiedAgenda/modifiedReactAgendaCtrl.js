@@ -12,12 +12,14 @@ var now = new Date();
 
 export default class ModifiedReactAgendaCtrl extends Component {
   constructor() {
+    console.log('being used!');
     super();
     this.state = {
       editMode: false,
       showCtrl: false,
       multiple: {},
       name: '',
+      description: '',
       classes: 'priority-1',
       startDateTime: now,
       endDateTime: now
@@ -31,7 +33,9 @@ export default class ModifiedReactAgendaCtrl extends Component {
   }
 
   componentDidMount() {
+    console.dir(this.state);
 
+    console.log("test");
     if (this.props.itemColors) {
       this.setState({
         classes: Object.keys(this.props.itemColors)[0]
@@ -100,6 +104,7 @@ export default class ModifiedReactAgendaCtrl extends Component {
 
 
   dispatchEvent(obj) {
+    console.log("test");
     var newAdded = []
     var items = this.props.items;
     if (obj['multiple']) {
@@ -112,7 +117,8 @@ export default class ModifiedReactAgendaCtrl extends Component {
         var endT = newAr[newAr.length - 1] || now;
         var lasobj = {
           _id: guid(),
-          name: obj.name,
+          // name: obj.name,
+          description: obj.description,
           startDateTime: new Date(start),
           endDateTime: new Date(endT),
           classes: obj.classes
@@ -139,10 +145,11 @@ export default class ModifiedReactAgendaCtrl extends Component {
 
       if (Object.values(obj).length > 1) {
         var newObj = {
-          name: this.state.name,
+          // name: this.state.name,
           startDateTime: new Date(this.state.startDateTime),
           endDateTime: new Date(this.state.endDateTime),
           classes: this.state.classes,
+          description: this.state.description,
           multiple: obj
         }
 
@@ -153,7 +160,8 @@ export default class ModifiedReactAgendaCtrl extends Component {
     }
 
     var newObj = {
-      name: this.state.name,
+      // name: this.state.name,
+      description: this.state.description,
       startDateTime: new Date(this.state.startDateTime),
       endDateTime: new Date(this.state.endDateTime),
       classes: this.state.classes
@@ -167,7 +175,7 @@ export default class ModifiedReactAgendaCtrl extends Component {
 
       var newObj = {
         _id: this.props.selectedCells[0]._id,
-        name: this.state.name,
+        // name: this.state.name,
         startDateTime: new Date(this.state.startDateTime),
         endDateTime: new Date(this.state.endDateTime),
         classes: this.state.classes
@@ -222,6 +230,11 @@ export default class ModifiedReactAgendaCtrl extends Component {
                 <p>{this.state.name}</p>
               </div>
             </div>
+            <div className="agendCtrls-label-inline">
+              <label>beschrijving</label>
+              <p>{this.state.description}</p>
+            </div>
+
             <div className="agendCtrls-timePicker-wrapper">
               <div className="agendCtrls-time-picker">
                 <label >Start Tijd</label>
@@ -252,6 +265,7 @@ export default class ModifiedReactAgendaCtrl extends Component {
               <label>Event name</label>
               <input type="text" ref="eventName" autoFocus name="name" className="agendCtrls-event-input" value={this.state.name} onChange={this.handleChange.bind(this)} placeholder="Event Name" />
             </div>
+
             <div className="agendCtrls-label-inline">
               <label>Color</label>
               <div className="agendCtrls-radio-wrapper">

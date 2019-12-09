@@ -1,7 +1,9 @@
 
 import React, { Key } from 'react';
 // @ts-ignore
-import { ReactAgenda, guid, Modal } from 'react-agenda';
+// import { ReactAgenda, guid, Modal } from 'react-agenda';
+import { guid, Modal } from 'react-agenda';
+
 import './AgendaStyle.css';
 import './DateTimeStyle.css';
 import axios from 'axios';
@@ -9,6 +11,9 @@ import { environment } from '../../enviroment';
 
 import ModifiedReactAgendaItem from '../../modifiedAgenda/modifiedReactAgendaItem';
 import ModifiedReactAgendaCtrl from '../../modifiedAgenda/modifiedReactAgendaCtrl';
+import ModifiedReactAgenda from '../../modifiedAgenda/modifiedReactAgenda';
+
+
 
 import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonMenuButton, IonButton, IonRow, IonSplitPane, IonPage, IonFab, IonIcon, IonModal, IonAlert, IonLabel, IonCheckbox, IonPopover, IonFabList } from "@ionic/react";
 import '../../theme/styling.css';
@@ -122,13 +127,18 @@ export default class Dashboard extends React.Component<any, MyState> {
                         }
 
                         var name = data[x].user.name ? data[x].user.name : "vrij";
-
+                        // console.log(data[x].description);
+                        if (data[x].user.name = "vrij")
+                            var color = 'color-2';
+                        else
+                            var color = 'color-1';
                         var item = {
                             _id: guid(),
                             name: name,
                             startDateTime: new Date(data[x]['start_time']),
                             endDateTime: new Date(data[x]['end_time']),
-                            classes: 'color-2 color-3'
+                            description: data[x].description,
+                            classes: color
                         }
 
                         items.push(item)
@@ -282,6 +292,8 @@ export default class Dashboard extends React.Component<any, MyState> {
                 this.setState({ 'messageTitle': "Succesvol toegevoegd" });
                 this.open("showMessage");
                 this.setState({ 'messageContent': "U heeft nu een paar afspraken met de gebruiker" });
+                //TODO Add for loop that uses function in the reactagendactrl
+
             }, (error) => {
                 console.error(error.message);
                 if (error.message == 'Network Error') {
@@ -300,7 +312,6 @@ export default class Dashboard extends React.Component<any, MyState> {
         return (
             <div>
                 <IonSplitPane contentId='content2'>
-
                     <IonMenu contentId='content2' type='push' >
                         <SideBar />
                     </IonMenu>
@@ -315,7 +326,7 @@ export default class Dashboard extends React.Component<any, MyState> {
                             <IonMenuButton></IonMenuButton>
 
                         </IonRow>
-                        <ReactAgenda
+                        <ModifiedReactAgenda
                             minDate={now}
                             maxDate={new Date(now.getFullYear(), now.getMonth() + 3)}
                             disablePrevButton={false}
@@ -329,12 +340,13 @@ export default class Dashboard extends React.Component<any, MyState> {
                             autoScale={false}
                             fixedHeader={true}
                             onItemEdit={this.handleItemEdit.bind(this)}
-                            itemComponent={ModifiedReactAgendaItem}
+                            // itemComponent={ModifiedReactAgendaItem}
                             onCellSelect={this.handleCellSelection.bind(this)}
                             startAtTime={this.state.startAtTime}
                             endAtTime={this.state.endAtTime}
 
-                            onRangeSelection={this.handleRangeSelection.bind(this)} />
+                            onRangeSelection={this.handleRangeSelection.bind(this)}
+                        />
                         {
                             localStorage.getItem('role') == 'student' ?
                                 <IonFab vertical="bottom" horizontal="end" >
