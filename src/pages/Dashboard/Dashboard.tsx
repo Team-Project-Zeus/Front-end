@@ -91,15 +91,7 @@ export default class Dashboard extends React.Component<any, MyState> {
 
 
     componentDidMount() {
-        const userRole = localStorage.getItem('role');
-        if (userRole == "driving_instructor") {
-            var location = "/instructor";
-        }
-        else {
-            var location = "/student";
-
-        }
-        axios.get(environment.APPOINTMENT_URL + location).then(response => response.data)
+        axios.get(environment.APPOINTMENT_URL).then(response => response.data).then(data => data.data)
             .then((data) => {
                 const items = [];
                 if (typeof data === 'string') {
@@ -113,9 +105,8 @@ export default class Dashboard extends React.Component<any, MyState> {
 
                     for (var x = 0; data.length > x; x++) {
                         //Runs by the data to check if any can be combined into one object
-                        // console.dir(data[x]);
                         for (var y = x + 1; data.length > y; y++) {
-                            if (data[x]['end_time'] == data[y]['start_time'] && data[x][oppositeRole] == data[y][oppositeRole]) {
+                            if (data[x]['end_time'] == data[y]['start_time'] && JSON.stringify(data[x][oppositeRole]) == JSON.stringify(data[y][oppositeRole])) {
                                 data[x]['end_time'] = data[y]['end_time'];
                                 if (data[x].user)
                                     console.log(data[x].user.name)
@@ -126,12 +117,13 @@ export default class Dashboard extends React.Component<any, MyState> {
                             }
                         }
 
-                        var name = data[x].user.name ? data[x].user.name : "vrij";
-                        // console.log(data[x].description);
-                        if (data[x].user.name = "vrij")
-                            var color = 'color-2';
-                        else
+
+                        var name = data[x][oppositeRole] ? data[x][oppositeRole].name : "vrij";
+                        if (!data[x][oppositeRole])
                             var color = 'color-1';
+
+                        else
+                            var color = 'color-3';
                         var item = {
                             _id: guid(),
                             name: name,
@@ -232,7 +224,7 @@ export default class Dashboard extends React.Component<any, MyState> {
 
     async retrieveAvailable() {
         var response;
-        await axios.get(environment.APPOINTMENT_URL + "/availability").then(response => response.data)
+        await axios.get(environment.APPOINTMENT_URL + "/availability").then(response => response.data).then(data => data.data)
             .then((data) => {
                 if (typeof data === 'string') {
                     // this.setState({ 'error': "er zijn geen beschikbaren afspraken!" });
